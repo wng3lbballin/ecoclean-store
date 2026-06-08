@@ -16,7 +16,7 @@ const corsOrigin = process.env.CORS_ORIGIN || process.env.FRONTEND_URL || '*';
 app.use(
   cors({
     origin: corsOrigin === '*' ? '*' : corsOrigin.split(',').map((s) => s.trim()),
-    credentials: true,
+    credentials: corsOrigin !== '*',
   })
 );
 app.use(express.json());
