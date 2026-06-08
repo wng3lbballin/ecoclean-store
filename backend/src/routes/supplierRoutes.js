@@ -1,16 +1,15 @@
 const { Router } = require('express');
-const ctrl = require('../controllers/saleController');
+const ctrl = require('../controllers/supplierController');
 const auth = require('../middleware/auth');
 const role = require('../middleware/role');
 
 const router = Router();
-
 router.use(auth);
 
 router.get('/', ctrl.listar);
-router.get('/:id/ticket', ctrl.ticket);
 router.get('/:id', ctrl.obtener);
-router.post('/', role('admin', 'vendedor'), ctrl.crear);
-router.patch('/:id/estado', role('admin', 'vendedor'), ctrl.actualizarEstado);
+router.post('/', role('admin'), ctrl.crear);
+router.put('/:id', role('admin'), ctrl.editar);
+router.delete('/:id', role('admin'), ctrl.eliminar);
 
 module.exports = router;

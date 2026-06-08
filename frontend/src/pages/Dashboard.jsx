@@ -4,40 +4,42 @@ import api from '../services/api';
 import StatCard from '../components/ui/StatCard';
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ productos: 0, ventasHoy: 0, stockBajo: 0, ingresosMes: 0 });
+  const [stats, setStats] = useState({ productos: 0, ventasHoy: 0, stockBajo: 0, ingresosMes: 0, clientes: 0, pendientes: 0 });
   const [ultimasVentas, setUltimasVentas] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [prodRes, ventasRes] = await Promise.all([
+        const [prodRes, ventasRes, clientRes] = await Promise.all([
           api.get('/productos'),
           api.get('/ventas'),
+          api.get('/clientes'),
         ]);
 
         const productos = prodRes.data || [];
         const ventas = ventasRes.data || [];
 
         const hoy = new Date().toISOString().split('T')[0];
-        const ventasHoy = ventas.filter(
-          (v) => v.fecha && v.fecha.startsWith(hoy)
-        ).length;
+        const ventasHoy = ventas.filter((v) => v.fecha && v.fecha.startsWith(hoy)).length;
 
         const ingresosMes = ventas
           .filter((v) => {
             if (!v.fecha) return false;
-            const fechaVenta = new Date(v.fecha);
-            const ahora = new Date();
-            return fechaVenta.getMonth() === ahora.getMonth() && fechaVenta.getFullYear() === ahora.getFullYear();
+            const fv = new Date(v.fecha); const ahora = new Date();
+            return fv.getMonth() === ahora.getMonth() && fv.getFullYear() === ahora.getFullYear();
           })
           .reduce((sum, v) => sum + parseFloat(v.total || 0), 0);
+
+        const pendientes = ventas.filter((v) => v.estado === 'pendiente').length;
 
         setStats({
           productos: productos.length,
           ventasHoy,
           stockBajo: productos.filter((p) => p.stock < 5).length,
           ingresosMes,
+          clientes: (clientRes.data || []).length,
+          pendientes,
         });
 
         setUltimasVentas(ventas.slice(0, 5));
@@ -77,11 +79,13 @@ export default function Dashboard() {
         <p className="text-sm text-slate-500 mt-1">Resumen general del sistema</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard title="Total Productos" value={stats.productos} icon="📦" color="emerald" />
         <StatCard title="Ventas Hoy" value={stats.ventasHoy} icon="🛒" color="blue" />
         <StatCard title="Stock Bajo" value={stats.stockBajo} icon="⚠️" color="amber" />
         <StatCard title="Ingresos del Mes" value={formatMoney(stats.ingresosMes)} icon="💰" color="purple" />
+        <StatCard title="Clientes" value={stats.clientes} icon="👥" color="emerald" />
+        <StatCard title="Pendientes" value={stats.pendientes} icon="⏳" color="amber" />
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm">

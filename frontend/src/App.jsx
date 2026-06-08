@@ -7,6 +7,9 @@ import Dashboard from './pages/Dashboard';
 import Categories from './pages/Categories';
 import Products from './pages/Products';
 import Sales from './pages/Sales';
+import Clients from './pages/Clients';
+import Suppliers from './pages/Suppliers';
+import Purchases from './pages/Purchases';
 
 export default function App() {
   return (
@@ -47,6 +50,33 @@ export default function App() {
               element={
                 <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
                   <Sales />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/clientes"
+              element={
+                <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
+                  <Clients />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/proveedores"
+              element={
+                <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
+                  <Suppliers />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/compras"
+              element={
+                <ProtectedRoute roles={['admin']}>
+                  <Purchases />
                 </ProtectedRoute>
               }
             />

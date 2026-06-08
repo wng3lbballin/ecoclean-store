@@ -6,6 +6,9 @@ const authRoutes = require('./routes/authRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
 const saleRoutes = require('./routes/saleRoutes');
+const clientRoutes = require('./routes/clientRoutes');
+const supplierRoutes = require('./routes/supplierRoutes');
+const purchaseRoutes = require('./routes/purchaseRoutes');
 const { seedUsers } = require('./utils/seeder');
 
 const app = express();
@@ -25,6 +28,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categorias', categoryRoutes);
 app.use('/api/productos', productRoutes);
 app.use('/api/ventas', saleRoutes);
+app.use('/api/clientes', clientRoutes);
+app.use('/api/proveedores', supplierRoutes);
+app.use('/api/compras', purchaseRoutes);
 
 app.get('/api/health', async (_req, res) => {
   try {
@@ -85,6 +91,56 @@ async function init() {
         precio_unitario DECIMAL(10,2) NOT NULL,
         subtotal DECIMAL(12,2) NOT NULL
       );
+
+      CREATE TABLE IF NOT EXISTS clientes (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        nombre VARCHAR(150) NOT NULL,
+        email VARCHAR(150) DEFAULT '',
+        telefono VARCHAR(30) DEFAULT '',
+        direccion TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS proveedores (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        nombre VARCHAR(150) NOT NULL,
+        contacto VARCHAR(100) DEFAULT '',
+        telefono VARCHAR(30) DEFAULT '',
+        email VARCHAR(150) DEFAULT '',
+        direccion TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS compras (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        proveedor_id UUID NOT NULL REFERENCES proveedores(id),
+        usuario_id UUID NOT NULL REFERENCES usuarios(id),
+        total DECIMAL(12,2) NOT NULL DEFAULT 0,
+        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS detalle_compras (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        compra_id UUID NOT NULL REFERENCES compras(id) ON DELETE CASCADE,
+        producto_id UUID NOT NULL REFERENCES productos(id),
+        cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+        precio_unitario DECIMAL(10,2) NOT NULL,
+        subtotal DECIMAL(12,2) NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS movimientos_stock (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        producto_id UUID NOT NULL REFERENCES productos(id),
+        tipo VARCHAR(10) NOT NULL CHECK (tipo IN ('entrada','salida')),
+        cantidad INTEGER NOT NULL,
+        referencia VARCHAR(50) DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      ALTER TABLE ventas ADD COLUMN IF NOT EXISTS cliente_id UUID REFERENCES clientes(id);
+      ALTER TABLE ventas ADD COLUMN IF NOT EXISTS numero_factura VARCHAR(20) DEFAULT '';
+      ALTER TABLE ventas ADD COLUMN IF NOT EXISTS estado VARCHAR(20) DEFAULT 'pagado' CHECK (estado IN ('pagado','pendiente','cancelado'));
     `);
 
     console.log('Tablas verificadas/creadas');

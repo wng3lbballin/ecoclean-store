@@ -4,9 +4,12 @@ import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'vendedor', 'revisor'] },
+  { to: '/ventas', label: 'Facturación', icon: '🧾', roles: ['admin', 'vendedor', 'revisor'] },
   { to: '/productos', label: 'Productos', icon: '📦', roles: ['admin', 'vendedor', 'revisor'] },
   { to: '/categorias', label: 'Categorías', icon: '🏷️', roles: ['admin'] },
-  { to: '/ventas', label: 'Ventas', icon: '💰', roles: ['admin', 'vendedor', 'revisor'] },
+  { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor'] },
+  { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor'] },
+  { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin'] },
 ];
 
 const roleLabels = {

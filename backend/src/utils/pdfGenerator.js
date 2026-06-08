@@ -10,26 +10,25 @@ function generateTicket(venta) {
     doc.on('end', () => resolve(Buffer.concat(chunks)));
 
     doc.fontSize(16).font('Helvetica-Bold').text('EcoClean Store', { align: 'center' });
-    doc.fontSize(8).font('Helvetica').fillColor('#64748b').text('Sistema de Gestión', { align: 'center' });
+    doc.fontSize(8).font('Helvetica').fillColor('#64748b').text('Comprobante de Venta', { align: 'center' });
     doc.moveDown(0.3);
 
     doc.fillColor('#334155')
-      .moveTo(20, doc.y)
-      .lineTo(280, doc.y)
-      .stroke('#e2e8f0');
-
+      .moveTo(20, doc.y).lineTo(280, doc.y).stroke('#e2e8f0');
     doc.moveDown(0.5);
 
     const id = venta.id.substring(0, 8);
     const fecha = new Date(venta.fecha).toLocaleString('es-MX', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
     });
 
     doc.fontSize(7).font('Helvetica').fillColor('#475569');
-    doc.text(`Ticket:  #${id}`, { continued: false });
+    if (venta.numero_factura) doc.text(`Factura: ${venta.numero_factura}`);
+    doc.text(`Ticket:  #${id}`);
     doc.text(`Fecha:   ${fecha}`);
     doc.text(`Atendió: ${venta.vendedor_nombre || '—'}`);
+    if (venta.cliente_nombre) doc.text(`Cliente: ${venta.cliente_nombre}`);
+    doc.text(`Estado:  ${venta.estado || 'pagado'}`);
     doc.moveDown(0.5);
 
     doc.fillColor('#334155')
