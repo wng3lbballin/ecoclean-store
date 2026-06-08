@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ecoclean-db
+    environment:
+      POSTGRES_DB: ecoclean
+      POSTGRES_USER: ecoclean
+      POSTGRES_PASSWORD: ecoclean123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecoclean"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: ecoclean-api
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ecoclean
+      DB_USER: ecoclean
+      DB_PASSWORD: ecoclean123
+      JWT_SECRET: ${JWT_SECRET:-ecoclean_jwt_secret_key_2024}
+      NODE_ENV: production
+      CORS_ORIGIN: ${FRONTEND_URL:-http://localhost:3000}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-/api}
+    container_name: ecoclean-web
+    ports:
+      - "3000:80"
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-/api}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  pgdata:
