@@ -1,10 +1,11 @@
 #!/bin/sh
 
-BACKEND_HOST="${BACKEND_HOST:-backend}"
-echo "entrypoint: BACKEND_HOST=${BACKEND_HOST}"
+API_URL="${API_URL:-/api}"
+echo "Generating runtime config: API_URL=${API_URL}"
 
-sed -i.bak "s/__BACKEND_HOST__/${BACKEND_HOST}/g" /etc/nginx/conf.d/default.conf
-rm -f /etc/nginx/conf.d/default.conf.bak
+cat > /usr/share/nginx/html/config.js << EOF
+window.__API_URL__ = "${API_URL}";
+EOF
 
-echo "entrypoint: nginx config ready, starting..."
+echo "Starting nginx..."
 exec nginx -g "daemon off;"

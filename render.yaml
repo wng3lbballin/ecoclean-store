@@ -29,8 +29,8 @@ services:
     dockerfilePath: frontend/Dockerfile
     dockerContext: frontend
     envVars:
-      - key: BACKEND_HOST
-        value: ecoclean-api
+      - key: API_URL
+        value: https://ecoclean-api.onrender.com/api
 
 databases:
   - name: ecoclean-db
