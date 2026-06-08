@@ -10,6 +10,7 @@ const clientRoutes = require('./routes/clientRoutes');
 const supplierRoutes = require('./routes/supplierRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
 const { seedUsers } = require('./utils/seeder');
+const { seedData } = require('./utils/seedData');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -146,6 +147,7 @@ async function init() {
     console.log('Tablas verificadas/creadas');
 
     await seedUsers();
+    await seedData();
 
     app.listen(PORT, () => {
       console.log(`EcoClean API corriendo en puerto ${PORT}`);
