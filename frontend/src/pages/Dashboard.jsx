@@ -54,7 +54,7 @@ export default function Dashboard() {
   }, []);
 
   const formatMoney = (value) =>
-    new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '—';

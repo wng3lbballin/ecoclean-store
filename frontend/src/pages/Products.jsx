@@ -3,7 +3,7 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const formatMoney = (value) =>
-  new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
 export default function Products() {
   const { user } = useAuth();
