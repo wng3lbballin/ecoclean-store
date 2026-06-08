@@ -32,21 +32,21 @@ async function seedData() {
 
     const prodRes = await pool.query(`
       INSERT INTO productos (nombre, descripcion, precio, stock, categoria_id) VALUES
-        ('Desinfectante Multiusos 5L', 'Desinfectante concentrado para todo tipo de superficies', 55.00, 45, '${cats['Desinfección']}'),
-        ('Cloro Gel 1L', 'Cloro en presentación gel para baños y cocinas', 22.00, 120, '${cats['Desinfección']}'),
-        ('Limpiador de Pisos Floral 2L', 'Limpiador para pisos con aroma floral', 38.00, 80, '${cats['Cuidado de Pisos']}'),
-        ('Desengrasante Industrial 5L', 'Desengrasante de alta potencia para cocinas industriales', 95.00, 30, '${cats['Limpieza Industrial']}'),
-        ('Jabón Líquido para Manos 500ml', 'Jabón líquido antibacterial para manos', 18.00, 200, '${cats['Jabones']}'),
-        ('Detergente Líquido Ropa 3L', 'Detergente para ropa delicada y normal', 45.00, 95, '${cats['Lavandería']}'),
-        ('Suavizante de Telas 2L', 'Suavizante concentrado aroma lavanda', 32.00, 70, '${cats['Lavandería']}'),
-        ('Aromatizante en Spray 400ml', 'Aromatizante ambiental spray automático', 28.00, 150, '${cats['Aromatizantes']}'),
-        ('Limpiador de Vidrios 500ml', 'Limpiador para vidrios y espejos sin rayas', 16.00, 180, '${cats['Limpieza Hogar']}'),
-        ('Cera para Pisos 1L', 'Cera líquida autobrillante para pisos', 50.00, 25, '${cats['Cuidado de Pisos']}'),
-        ('Escoba Profesional', 'Escoba de cerdas duras para uso rudo', 35.00, 60, '${cats['Accesorios']}'),
-        ('Trapeador de Microfibra', 'Trapeador con cabezal de microfibra lavable', 65.00, 40, '${cats['Accesorios']}'),
-        ('Limpiador de Cocina 750ml', 'Limpiador multiusos especial para cocina', 25.00, 110, '${cats['Cocina']}'),
-        ('Gel Antibacterial 1L', 'Gel antibacterial para manos y superficies', 35.00, 160, '${cats['Higiene Personal']}'),
-        ('Shampoo para Alfombras 1L', 'Limpiador espumoso para alfombras y tapetes', 60.00, 15, '${cats['Cuidado de Pisos']}')
+        ('Desinfectante Multiusos 5L', 'Desinfectante concentrado para todo tipo de superficies', 12.50, 45, '${cats['Desinfección']}'),
+        ('Cloro Gel 1L', 'Cloro en presentación gel para baños y cocinas', 4.80, 120, '${cats['Desinfección']}'),
+        ('Limpiador de Pisos Floral 2L', 'Limpiador para pisos con aroma floral', 8.50, 80, '${cats['Cuidado de Pisos']}'),
+        ('Desengrasante Industrial 5L', 'Desengrasante de alta potencia para cocinas industriales', 22.00, 30, '${cats['Limpieza Industrial']}'),
+        ('Jabón Líquido para Manos 500ml', 'Jabón líquido antibacterial para manos', 3.90, 200, '${cats['Jabones']}'),
+        ('Detergente Líquido Ropa 3L', 'Detergente para ropa delicada y normal', 10.50, 95, '${cats['Lavandería']}'),
+        ('Suavizante de Telas 2L', 'Suavizante concentrado aroma lavanda', 7.50, 70, '${cats['Lavandería']}'),
+        ('Aromatizante en Spray 400ml', 'Aromatizante ambiental spray automático', 6.50, 150, '${cats['Aromatizantes']}'),
+        ('Limpiador de Vidrios 500ml', 'Limpiador para vidrios y espejos sin rayas', 3.50, 180, '${cats['Limpieza Hogar']}'),
+        ('Cera para Pisos 1L', 'Cera líquida autobrillante para pisos', 12.00, 25, '${cats['Cuidado de Pisos']}'),
+        ('Escoba Profesional', 'Escoba de cerdas duras para uso rudo', 8.00, 60, '${cats['Accesorios']}'),
+        ('Trapeador de Microfibra', 'Trapeador con cabezal de microfibra lavable', 15.00, 40, '${cats['Accesorios']}'),
+        ('Limpiador de Cocina 750ml', 'Limpiador multiusos especial para cocina', 5.50, 110, '${cats['Cocina']}'),
+        ('Gel Antibacterial 1L', 'Gel antibacterial para manos y superficies', 8.00, 160, '${cats['Higiene Personal']}'),
+        ('Shampoo para Alfombras 1L', 'Limpiador espumoso para alfombras y tapetes', 14.00, 15, '${cats['Cuidado de Pisos']}')
       RETURNING id
     `);
 
