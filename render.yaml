@@ -2,10 +2,9 @@ services:
   - type: web
     name: ecoclean-api
     runtime: docker
-    repo: https://github.com/wng3lbballin/ecoclean-store
     plan: free
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
     healthCheckPath: /api/health
     envVars:
       - key: PORT
@@ -26,10 +25,9 @@ services:
   - type: web
     name: ecoclean-web
     runtime: docker
-    repo: https://github.com/wng3lbballin/ecoclean-store
     plan: free
-    dockerfilePath: ./frontend/Dockerfile
-    dockerContext: ./frontend
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: frontend
     envVars:
       - key: BACKEND_HOST
         value: ecoclean-api
