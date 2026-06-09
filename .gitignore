@@ -4,3 +4,7 @@ build/
 dist/
 *.log
 .DS_Store
+
+*.docx
+
+*.docx
