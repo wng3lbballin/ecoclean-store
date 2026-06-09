@@ -4,6 +4,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import ChangePassword from './pages/ChangePassword';
+import Users from './pages/Users';
+import AuditLogs from './pages/AuditLogs';
 import Categories from './pages/Categories';
 import Products from './pages/Products';
 import Sales from './pages/Sales';
@@ -26,6 +29,29 @@ export default function App() {
             }
           >
             <Route path="/dashboard" element={<Dashboard />} />
+
+            <Route
+              path="/cambiar-password"
+              element={<ChangePassword />}
+            />
+
+            <Route
+              path="/usuarios"
+              element={
+                <ProtectedRoute roles={['admin']}>
+                  <Users />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/logs"
+              element={
+                <ProtectedRoute roles={['admin', 'revisor']}>
+                  <AuditLogs />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/categorias"

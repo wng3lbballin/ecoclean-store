@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { registrarLog } = require('../utils/logger');
 
 const listar = async (req, res) => {
   try {
@@ -61,6 +62,7 @@ const crear = async (req, res) => {
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
       [nombre, descripcion || '', precio, stock || 0, categoria_id || null, imagen_url || '']
     );
+    await registrarLog(req.user.id, req.user.nombre, `creó producto "${nombre}"`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error('Error crear producto:', err);
@@ -90,6 +92,7 @@ const editar = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
+    await registrarLog(req.user.id, req.user.nombre, `editó producto "${nombre}"`);
     res.json(result.rows[0]);
   } catch (err) {
     console.error('Error editar producto:', err);
@@ -106,6 +109,7 @@ const eliminar = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
+    await registrarLog(req.user.id, req.user.nombre, `eliminó producto "${result.rows[0].nombre}"`);
     res.json({ message: 'Producto eliminado' });
   } catch (err) {
     console.error('Error eliminar producto:', err);

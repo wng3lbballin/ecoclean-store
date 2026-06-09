@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { registrarLog } = require('../utils/logger');
 
 const listar = async (_req, res) => {
   try {
@@ -35,6 +36,7 @@ const crear = async (req, res) => {
       'INSERT INTO categorias (nombre, descripcion) VALUES ($1, $2) RETURNING *',
       [nombre, descripcion || '']
     );
+    await registrarLog(req.user.id, req.user.nombre, `creó categoría "${nombre}"`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error('Error crear categoria:', err);
@@ -55,6 +57,7 @@ const editar = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Categoría no encontrada' });
     }
+    await registrarLog(req.user.id, req.user.nombre, `editó categoría "${nombre}"`);
     res.json(result.rows[0]);
   } catch (err) {
     console.error('Error editar categoria:', err);
@@ -71,6 +74,7 @@ const eliminar = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Categoría no encontrada' });
     }
+    await registrarLog(req.user.id, req.user.nombre, `eliminó categoría "${result.rows[0].nombre}"`);
     res.json({ message: 'Categoría eliminada' });
   } catch (err) {
     console.error('Error eliminar categoria:', err);

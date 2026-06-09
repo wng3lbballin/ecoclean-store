@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database');
+const { registrarLog } = require('../utils/logger');
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -36,6 +37,8 @@ const login = async (req, res) => {
       { expiresIn: '8h' }
     );
 
+    await registrarLog(user.id, user.nombre, 'inició sesión');
+
     res.json({
       token,
       user: {
@@ -48,6 +51,40 @@ const login = async (req, res) => {
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+
+const cambiarPassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: 'Contraseña actual y nueva son requeridas' });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' });
+  }
+
+  try {
+    const result = await pool.query('SELECT password FROM usuarios WHERE id = $1', [req.user.id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    const validPassword = await bcrypt.compare(currentPassword, result.rows[0].password);
+    if (!validPassword) {
+      return res.status(400).json({ error: 'La contraseña actual es incorrecta' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await pool.query('UPDATE usuarios SET password = $1 WHERE id = $2', [hashedPassword, req.user.id]);
+
+    await registrarLog(req.user.id, req.user.nombre, 'cambió su contraseña');
+
+    res.json({ message: 'Contraseña actualizada exitosamente' });
+  } catch (err) {
+    console.error('Error cambiar password:', err);
+    res.status(500).json({ error: 'Error al cambiar contraseña' });
   }
 };
 
@@ -69,4 +106,4 @@ const me = async (req, res) => {
   }
 };
 
-module.exports = { login, me };
+module.exports = { login, me, cambiarPassword };

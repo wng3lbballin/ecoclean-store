@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { registrarLog } = require('../utils/logger');
 
 const listar = async (_req, res) => {
   try {
@@ -94,6 +95,8 @@ const crear = async (req, res) => {
     }
 
     await client.query('COMMIT');
+
+    await registrarLog(req.user.id, req.user.nombre, 'registró compra');
 
     const compraConDetalle = await pool.query(
       `SELECT c.*, p.nombre AS proveedor_nombre

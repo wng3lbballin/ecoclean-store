@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const { generateTicket } = require('../utils/pdfGenerator');
+const { registrarLog } = require('../utils/logger');
 
 const listar = async (_req, res) => {
   try {
@@ -109,6 +110,8 @@ const crear = async (req, res) => {
 
     await client.query('COMMIT');
 
+    await registrarLog(req.user.id, req.user.nombre, `registró venta #${venta.numero_factura}`);
+
     const ventaConDetalle = await pool.query(
       `SELECT v.*, u.nombre AS vendedor_nombre, c.nombre AS cliente_nombre
        FROM ventas v JOIN usuarios u ON u.id = v.usuario_id
@@ -141,6 +144,9 @@ const actualizarEstado = async (req, res) => {
       [estado, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Venta no encontrada' });
+
+    await registrarLog(req.user.id, req.user.nombre, `cambió estado de venta #${result.rows[0].numero_factura} a "${estado}"`);
+
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error al actualizar estado' });

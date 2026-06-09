@@ -29,14 +29,6 @@ Sistema ERP web para gestión de tienda de productos de limpieza.
 
 
 
-## Usuarios
-
-| Email | Contraseña | Rol |
-|-------|-----------|-----|
-| admin@ecoclean.com | 123456 | admin |
-| vendedor@ecoclean.com | 123456 | vendedor |
-| revisor@ecoclean.com | 123456 | revisor |
-
 ---
 
 ## Demo en vivo
@@ -103,8 +95,10 @@ Render crea automáticamente: PostgreSQL, backend (Docker) y frontend (Docker). 
 | `JWT_SECRET` | **Sí** | Clave para firmar tokens JWT |
 | `NODE_ENV` | No | `production` o `development` |
 | `FRONTEND_URL` / `CORS_ORIGIN` | No | Origen(es) permitidos para CORS |
+| `DEEPSEEK_API_KEY` | No* | Clave de API DeepSeek para el asistente IA y análisis de ventas |
 
 \* Usa `DATABASE_URL` o las variables individuales. `DATABASE_URL` tiene prioridad.
+\* Sin `DEEPSEEK_API_KEY`, las funciones de IA (chatbot y análisis) estarán deshabilitadas.
 
 ---
 

@@ -10,6 +10,8 @@ const navItems = [
   { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor'] },
   { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor'] },
   { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin'] },
+  { to: '/usuarios', label: 'Usuarios', icon: '👤', roles: ['admin'] },
+  { to: '/logs', label: 'Auditoría', icon: '📋', roles: ['admin', 'revisor'] },
 ];
 
 const roleLabels = {

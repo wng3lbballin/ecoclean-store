@@ -3,12 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const supplierRoutes = require('./routes/supplierRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
+const logRoutes = require('./routes/logRoutes');
+const statsRoutes = require('./routes/statsRoutes');
+const iaRoutes = require('./routes/iaRoutes');
 const { seedUsers } = require('./utils/seeder');
 const { seedData } = require('./utils/seedData');
 
@@ -26,12 +30,16 @@ app.use(
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/usuarios', userRoutes);
 app.use('/api/categorias', categoryRoutes);
 app.use('/api/productos', productRoutes);
 app.use('/api/ventas', saleRoutes);
 app.use('/api/clientes', clientRoutes);
 app.use('/api/proveedores', supplierRoutes);
 app.use('/api/compras', purchaseRoutes);
+app.use('/api/logs', logRoutes);
+app.use('/api/estadisticas', statsRoutes);
+app.use('/api/ia', iaRoutes);
 
 app.get('/api/health', async (_req, res) => {
   try {
@@ -142,6 +150,15 @@ async function init() {
       ALTER TABLE ventas ADD COLUMN IF NOT EXISTS cliente_id UUID REFERENCES clientes(id);
       ALTER TABLE ventas ADD COLUMN IF NOT EXISTS numero_factura VARCHAR(20) DEFAULT '';
       ALTER TABLE ventas ADD COLUMN IF NOT EXISTS estado VARCHAR(20) DEFAULT 'pagado' CHECK (estado IN ('pagado','pendiente','cancelado'));
+
+      CREATE TABLE IF NOT EXISTS logs_auditoria (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        usuario_id UUID NOT NULL REFERENCES usuarios(id),
+        usuario_nombre VARCHAR(100) NOT NULL,
+        accion VARCHAR(250) NOT NULL,
+        detalle TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
     `);
 
     console.log('Tablas verificadas/creadas');

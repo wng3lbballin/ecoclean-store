@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { registrarLog } = require('../utils/logger');
 
 const listar = async (_req, res) => {
   try {
@@ -27,6 +28,7 @@ const crear = async (req, res) => {
       'INSERT INTO clientes (nombre, email, telefono, direccion) VALUES ($1,$2,$3,$4) RETURNING *',
       [nombre, email || '', telefono || '', direccion || '']
     );
+    await registrarLog(req.user.id, req.user.nombre, `creó cliente "${nombre}"`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error al crear cliente' });
@@ -42,6 +44,7 @@ const editar = async (req, res) => {
       [nombre, email || '', telefono || '', direccion || '', req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Cliente no encontrado' });
+    await registrarLog(req.user.id, req.user.nombre, `editó cliente "${nombre}"`);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error al editar cliente' });
@@ -52,6 +55,7 @@ const eliminar = async (req, res) => {
   try {
     const result = await pool.query('DELETE FROM clientes WHERE id=$1 RETURNING *', [req.params.id]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Cliente no encontrado' });
+    await registrarLog(req.user.id, req.user.nombre, `eliminó cliente "${result.rows[0].nombre}"`);
     res.json({ message: 'Cliente eliminado' });
   } catch (err) {
     res.status(500).json({ error: 'Error al eliminar cliente' });

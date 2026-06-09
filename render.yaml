@@ -23,6 +23,8 @@ services:
         value: "*"
       - key: FRONTEND_URL
         value: https://ecoclean-web.onrender.com
+      - key: DEEPSEEK_API_KEY
+        sync: false
 
   - type: web
     name: ecoclean-web

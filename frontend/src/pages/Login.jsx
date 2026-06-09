@@ -83,10 +83,6 @@ export default function Login() {
             </button>
           </form>
         </div>
-
-        <p className="text-xs text-center text-slate-400 mt-6">
-          Accesos: admin@ / vendedor@ / revisor@ecoclean.com — 123456
-        </p>
       </div>
     </div>
   );

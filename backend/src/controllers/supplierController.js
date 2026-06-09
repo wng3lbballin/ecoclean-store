@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { registrarLog } = require('../utils/logger');
 
 const listar = async (_req, res) => {
   try {
@@ -27,6 +28,7 @@ const crear = async (req, res) => {
       'INSERT INTO proveedores (nombre, contacto, telefono, email, direccion) VALUES ($1,$2,$3,$4,$5) RETURNING *',
       [nombre, contacto || '', telefono || '', email || '', direccion || '']
     );
+    await registrarLog(req.user.id, req.user.nombre, `creó proveedor "${nombre}"`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error al crear proveedor' });
@@ -42,6 +44,7 @@ const editar = async (req, res) => {
       [nombre, contacto || '', telefono || '', email || '', direccion || '', req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Proveedor no encontrado' });
+    await registrarLog(req.user.id, req.user.nombre, `editó proveedor "${nombre}"`);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error al editar proveedor' });
@@ -52,6 +55,7 @@ const eliminar = async (req, res) => {
   try {
     const result = await pool.query('DELETE FROM proveedores WHERE id=$1 RETURNING *', [req.params.id]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Proveedor no encontrado' });
+    await registrarLog(req.user.id, req.user.nombre, `eliminó proveedor "${result.rows[0].nombre}"`);
     res.json({ message: 'Proveedor eliminado' });
   } catch (err) {
     res.status(500).json({ error: 'Error al eliminar proveedor' });
