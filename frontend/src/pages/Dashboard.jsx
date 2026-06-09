@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { useAuth } from '../context/AuthContext';
 import StatCard from '../components/ui/StatCard';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, AreaChart, Area, Legend,
+  AreaChart, Area,
 } from 'recharts';
 
 export default function Dashboard() {
-  const { user } = useAuth();
   const [stats, setStats] = useState({ productos: 0, ventasHoy: 0, stockBajo: 0, ingresosMes: 0, clientes: 0, pendientes: 0 });
   const [ultimasVentas, setUltimasVentas] = useState([]);
   const [ventasMensuales, setVentasMensuales] = useState([]);
@@ -25,22 +23,6 @@ export default function Dashboard() {
   const [analisisIA, setAnalisisIA] = useState('');
   const [analisisLoading, setAnalisisLoading] = useState(false);
   const [analisisError, setAnalisisError] = useState('');
-  const [injectLoading, setInjectLoading] = useState(false);
-  const [injectResult, setInjectResult] = useState('');
-
-  const injectarDatos = async () => {
-    if (!confirm('Esto generará ~250 ventas y ~50 compras históricas. ¿Continuar?')) return;
-    setInjectLoading(true);
-    setInjectResult('');
-    try {
-      const { data } = await api.post('/admin/injectar-datos');
-      setInjectResult(`Listo: ${data.ventasCreadas} ventas y ${data.comprasCreadas} compras creadas. Recarga la página.`);
-    } catch (err) {
-      setInjectResult('Error: ' + (err.response?.data?.error || 'falló la inyección'));
-    } finally {
-      setInjectLoading(false);
-    }
-  };
 
   useEffect(() => {
     async function loadData() {
@@ -165,22 +147,7 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold text-slate-800">Dashboard</h2>
           <p className="text-sm text-slate-500 mt-1">Resumen general del sistema</p>
         </div>
-        {user?.rol === 'admin' && (
-          <button
-            onClick={injectarDatos}
-            disabled={injectLoading}
-            className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium px-3 py-2 rounded-lg transition-colors disabled:opacity-50"
-            title="Genera datos históricos para gráficos y reportes"
-          >
-            {injectLoading ? 'Generando...' : 'Generar Datos Demo'}
-          </button>
-        )}
       </div>
-      {injectResult && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-2.5 rounded-lg">
-          {injectResult}
-        </div>
-      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard title="Total Productos" value={stats.productos} icon="📦" color="emerald" />

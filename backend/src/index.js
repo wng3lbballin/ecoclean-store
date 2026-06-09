@@ -13,7 +13,6 @@ const purchaseRoutes = require('./routes/purchaseRoutes');
 const logRoutes = require('./routes/logRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 const iaRoutes = require('./routes/iaRoutes');
-const adminRoutes = require('./routes/adminRoutes');
 const { seedUsers } = require('./utils/seeder');
 const { seedData } = require('./utils/seedData');
 
@@ -41,7 +40,6 @@ app.use('/api/compras', purchaseRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/estadisticas', statsRoutes);
 app.use('/api/ia', iaRoutes);
-app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', async (_req, res) => {
   try {
