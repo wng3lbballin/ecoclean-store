@@ -165,7 +165,7 @@ export default function Employees() {
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="bg-slate-50 text-left"><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Nombre</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Puesto</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Área</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Salario</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">NSS</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Ingreso</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Antigüedad</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center">Estado</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Acciones</th></tr></thead>
+            <thead><tr className="bg-slate-50 text-left"><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Nombre</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Puesto</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Área</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Salario</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Cédula</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Ingreso</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Antigüedad</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center">Estado</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Acciones</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
               {employees.length === 0 ? <tr><td colSpan={9} className="px-4 py-12 text-center"><span className="text-3xl block mb-2">👤</span><span className="text-sm text-slate-400">No hay empleados registrados</span></td></tr> : employees.map((emp) => (
                 <tr key={emp.id} className={`hover:bg-slate-50/50 ${!emp.activo ? 'opacity-60' : ''}`}>
@@ -303,8 +303,8 @@ export default function Employees() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">NSS</label>
-                  <input type="text" value={form.nss} onChange={(e) => setForm({ ...form, nss: e.target.value })} placeholder="Ej: 12345678901" maxLength={20} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Cédula</label>
+                  <input type="text" value={form.nss} onChange={(e) => setForm({ ...form, nss: e.target.value })} placeholder="Ej: 1712345678" maxLength={20} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
                 </div>
                 <div className="flex items-end pb-2">
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -314,7 +314,7 @@ export default function Employees() {
                       onChange={(e) => setForm({ ...form, seguro_social: e.target.checked })}
                       className="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
                     />
-                    <span className="text-sm font-medium text-slate-700">Seguro Social</span>
+                    <span className="text-sm font-medium text-slate-700">Afiliado IESS</span>
                   </label>
                 </div>
               </div>

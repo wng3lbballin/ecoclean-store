@@ -125,13 +125,13 @@ async function seedData() {
 
       await pool.query(`
         INSERT INTO empleados (nombre, email, telefono, puesto, area, salario, fecha_ingreso, nss, seguro_social) VALUES
-          ('Maria Gonzalez', 'maria.gonzalez@ecoclean.com', '555-4001', 'Gerente General', 'Administracion', 5000.00, '2023-06-15', '12345678901', true),
-          ('Carlos Ruiz', 'carlos.ruiz@ecoclean.com', '555-4002', 'Vendedor Senior', 'Ventas', 1200.00, '2024-01-10', '23456789012', true),
-          ('Ana Lopez', 'ana.lopez@ecoclean.com', '555-4003', 'Auxiliar de Bodega', 'Almacen', 700.00, '2024-03-05', '34567890123', true),
-          ('Pedro Sanchez', 'pedro.sanchez@ecoclean.com', '555-4004', 'Contador', 'Finanzas', 2000.00, '2024-02-20', '45678901234', true),
-          ('Laura Martinez', 'laura.martinez@ecoclean.com', '555-4005', 'Atencion al Cliente', 'Ventas', 700.00, '2024-04-12', '56789012345', true),
-          ('Jose Herrera', 'jose.herrera@ecoclean.com', '555-4006', 'Supervisor de Limpieza', 'Almacen', 900.00, '2024-05-08', '67890123456', false),
-          ('Diana Rojas', 'diana.rojas@ecoclean.com', '555-4007', 'Analista', 'RRHH', 1500.00, '2024-06-01', '78901234567', true)
+          ('Maria Gonzalez', 'maria.gonzalez@ecoclean.com', '099-4001', 'Gerente General', 'Administracion', 5000.00, '2023-06-15', '1712345678', true),
+          ('Carlos Ruiz', 'carlos.ruiz@ecoclean.com', '099-4002', 'Vendedor Senior', 'Ventas', 1200.00, '2024-01-10', '1709876543', true),
+          ('Ana Lopez', 'ana.lopez@ecoclean.com', '099-4003', 'Auxiliar de Bodega', 'Almacen', 700.00, '2024-03-05', '0912345678', true),
+          ('Pedro Sanchez', 'pedro.sanchez@ecoclean.com', '099-4004', 'Contador', 'Finanzas', 2000.00, '2024-02-20', '1718765432', true),
+          ('Laura Martinez', 'laura.martinez@ecoclean.com', '099-4005', 'Atencion al Cliente', 'Ventas', 700.00, '2024-04-12', '1723456789', true),
+          ('Jose Herrera', 'jose.herrera@ecoclean.com', '099-4006', 'Supervisor de Limpieza', 'Almacen', 900.00, '2024-05-08', '0909876543', false),
+          ('Diana Rojas', 'diana.rojas@ecoclean.com', '099-4007', 'Analista', 'RRHH', 1500.00, '2024-06-01', '1711122233', true)
       `);
 
       console.log('Datos de ejemplo insertados correctamente');
