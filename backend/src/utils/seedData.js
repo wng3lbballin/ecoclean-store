@@ -30,13 +30,13 @@ async function seedData() {
 
       await pool.query(`
         INSERT INTO productos (nombre, descripcion, precio, stock, categoria_id) VALUES
-          ('Desinfectante Multiusos 5L', 'Desinfectante concentrado para todo tipo de superficies', 12.50, 45, '${cats['Desinfeccion']}'),
-          ('Cloro Gel 1L', 'Cloro en presentacion gel para baños y cocinas', 4.80, 120, '${cats['Desinfeccion']}'),
+          ('Desinfectante Multiusos 5L', 'Desinfectante concentrado para todo tipo de superficies', 12.50, 45, '${cats['Desinfección']}'),
+          ('Cloro Gel 1L', 'Cloro en presentacion gel para baños y cocinas', 4.80, 120, '${cats['Desinfección']}'),
           ('Limpiador de Pisos Floral 2L', 'Limpiador para pisos con aroma floral', 8.50, 80, '${cats['Cuidado de Pisos']}'),
           ('Desengrasante Industrial 5L', 'Desengrasante de alta potencia para cocinas industriales', 22.00, 30, '${cats['Limpieza Industrial']}'),
           ('Jabon Liquido para Manos 500ml', 'Jabon liquido antibacterial para manos', 3.90, 200, '${cats['Jabones']}'),
-          ('Detergente Liquido Ropa 3L', 'Detergente para ropa delicada y normal', 10.50, 95, '${cats['Lavanderia']}'),
-          ('Suavizante de Telas 2L', 'Suavizante concentrado aroma lavanda', 7.50, 70, '${cats['Lavanderia']}'),
+          ('Detergente Liquido Ropa 3L', 'Detergente para ropa delicada y normal', 10.50, 95, '${cats['Lavandería']}'),
+          ('Suavizante de Telas 2L', 'Suavizante concentrado aroma lavanda', 7.50, 70, '${cats['Lavandería']}'),
           ('Aromatizante en Spray 400ml', 'Aromatizante ambiental spray automatico', 6.50, 150, '${cats['Aromatizantes']}'),
           ('Limpiador de Vidrios 500ml', 'Limpiador para vidrios y espejos sin rayas', 3.50, 180, '${cats['Limpieza Hogar']}'),
           ('Cera para Pisos 1L', 'Cera liquida autobrillante para pisos', 12.00, 25, '${cats['Cuidado de Pisos']}'),
