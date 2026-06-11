@@ -162,6 +162,73 @@ export default function Employees() {
         </div>
       </div>
 
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold text-slate-700">Desglose de Nómina</h3>
+          <span className="text-xs text-slate-400">IESS: empleado 9.45% | patronal 11.15%</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 text-left">
+                <th className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase">Empleado</th>
+                <th className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase text-right">Salario Bruto</th>
+                <th className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase text-right">Descuento IESS</th>
+                <th className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase text-right">Neto a Recibir</th>
+                <th className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase text-right">Aporte Patronal</th>
+                <th className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase text-center">IESS</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {(() => {
+                const activos = employees.filter((e) => e.activo);
+                let totalBruto = 0, totalDescuento = 0, totalNeto = 0, totalPatronal = 0;
+                const rows = activos.map((emp) => {
+                  const bruto = parseFloat(emp.salario) || 0;
+                  const descuento = emp.seguro_social ? bruto * 0.0945 : 0;
+                  const neto = bruto - descuento;
+                  const patronal = emp.seguro_social ? bruto * 0.1115 : 0;
+                  totalBruto += bruto;
+                  totalDescuento += descuento;
+                  totalNeto += neto;
+                  totalPatronal += patronal;
+                  return (
+                    <tr key={emp.id}>
+                      <td className="px-3 py-2 font-medium text-slate-800">{emp.nombre}<span className="text-xs text-slate-400 ml-1">({emp.puesto})</span></td>
+                      <td className="px-3 py-2 text-right text-slate-700">{formatMoney(bruto)}</td>
+                      <td className={`px-3 py-2 text-right ${descuento > 0 ? 'text-red-600' : 'text-slate-300'}`}>{descuento > 0 ? '-' + formatMoney(descuento) : '—'}</td>
+                      <td className="px-3 py-2 text-right font-semibold text-emerald-700">{formatMoney(neto)}</td>
+                      <td className={`px-3 py-2 text-right ${patronal > 0 ? 'text-amber-700' : 'text-slate-300'}`}>{patronal > 0 ? formatMoney(patronal) : '—'}</td>
+                      <td className="px-3 py-2 text-center"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${emp.seguro_social ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{emp.seguro_social ? 'Sí' : 'No'}</span></td>
+                    </tr>
+                  );
+                });
+                return (
+                  <>
+                    {rows}
+                    <tr className="bg-slate-100 font-semibold">
+                      <td className="px-3 py-2.5 text-slate-800 text-xs uppercase">Totales ({activos.length} empleados)</td>
+                      <td className="px-3 py-2.5 text-right text-slate-800">{formatMoney(totalBruto)}</td>
+                      <td className="px-3 py-2.5 text-right text-red-700">{formatMoney(totalDescuento)}</td>
+                      <td className="px-3 py-2.5 text-right text-emerald-700">{formatMoney(totalNeto)}</td>
+                      <td className="px-3 py-2.5 text-right text-amber-700">{formatMoney(totalPatronal)}</td>
+                      <td className="px-3 py-2.5"></td>
+                    </tr>
+                    <tr className="bg-violet-50">
+                      <td className="px-3 py-2 text-xs text-violet-700 font-semibold uppercase" colSpan={6}>
+                        Costo Total Empresa: {formatMoney(totalNeto + totalPatronal)} &nbsp;|&nbsp;
+                        Neto: {formatMoney(totalNeto)} &nbsp;|&nbsp;
+                        IESS Patronal: {formatMoney(totalPatronal)}
+                      </td>
+                    </tr>
+                  </>
+                );
+              })()}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
