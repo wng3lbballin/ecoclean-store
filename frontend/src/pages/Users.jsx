@@ -95,6 +95,7 @@ export default function Users() {
       admin: 'bg-purple-100 text-purple-700',
       vendedor: 'bg-blue-100 text-blue-700',
       revisor: 'bg-slate-100 text-slate-700',
+      gerente: 'bg-emerald-100 text-emerald-700',
     };
     return colors[rol] || 'bg-slate-100 text-slate-700';
   };
@@ -255,6 +256,7 @@ export default function Users() {
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="admin">Administrador</option>
+                  <option value="gerente">Gerente</option>
                   <option value="vendedor">Vendedor</option>
                   <option value="revisor">Revisor</option>
                 </select>
