@@ -43,6 +43,10 @@ const crear = async (req, res) => {
     return res.status(400).json({ error: 'Rol inválido. Debe ser admin, vendedor, revisor o gerente' });
   }
 
+  if (req.user.rol !== 'admin' && rol === 'admin') {
+    return res.status(403).json({ error: 'Solo el administrador puede asignar el rol admin' });
+  }
+
   if (password.length < 6) {
     return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
   }
@@ -80,6 +84,10 @@ const editar = async (req, res) => {
     return res.status(400).json({ error: 'Rol inválido' });
   }
 
+  if (req.user.rol !== 'admin' && rol === 'admin') {
+    return res.status(403).json({ error: 'Solo el administrador puede asignar el rol admin' });
+  }
+
   try {
     const target = await pool.query('SELECT * FROM usuarios WHERE id = $1', [req.params.id]);
     if (target.rows.length === 0) {
@@ -87,6 +95,10 @@ const editar = async (req, res) => {
     }
 
     const targetUser = target.rows[0];
+
+    if (req.user.rol !== 'admin' && targetUser.rol === 'admin') {
+      return res.status(403).json({ error: 'Solo el administrador puede modificar usuarios con rol admin' });
+    }
 
     if (targetUser.email === MAIN_ADMIN_EMAIL && rol !== 'admin') {
       return res.status(403).json({ error: 'No se puede cambiar el rol del administrador principal' });
@@ -126,6 +138,10 @@ const desactivar = async (req, res) => {
 
     if (targetUser.email === MAIN_ADMIN_EMAIL) {
       return res.status(403).json({ error: 'No se puede desactivar al administrador principal' });
+    }
+
+    if (req.user.rol !== 'admin' && targetUser.rol === 'admin') {
+      return res.status(403).json({ error: 'Solo el administrador puede desactivar usuarios con rol admin' });
     }
 
     if (targetUser.id === req.user.id) {

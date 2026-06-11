@@ -101,6 +101,8 @@ export default function Users() {
   };
 
   const isMainAdmin = (u) => u.email === MAIN_ADMIN_EMAIL;
+  const isAdminUser = (u) => u.rol === 'admin';
+  const canEdit = (u) => !isMainAdmin(u) && !(currentUser?.rol !== 'admin' && isAdminUser(u));
 
   if (loading) {
     return (
@@ -173,7 +175,7 @@ export default function Users() {
                     </td>
                     <td className="px-5 py-3 text-right">
                       <div className="flex items-center justify-end gap-1">
-                        {!isMainAdmin(u) && (
+                        {canEdit(u) && (
                           <>
                             <button
                               onClick={() => openEdit(u)}
@@ -255,7 +257,7 @@ export default function Users() {
                   onChange={(e) => setForm({ ...form, rol: e.target.value })}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="admin">Administrador</option>
+                  {currentUser?.rol === 'admin' && <option value="admin">Administrador</option>}
                   <option value="gerente">Gerente</option>
                   <option value="vendedor">Vendedor</option>
                   <option value="revisor">Revisor</option>
