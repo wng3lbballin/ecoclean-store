@@ -190,6 +190,20 @@ async function init() {
         activo BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+
+      CREATE TABLE IF NOT EXISTS historial_empleados (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        empleado_id UUID NOT NULL REFERENCES empleados(id) ON DELETE CASCADE,
+        puesto_anterior VARCHAR(100) NOT NULL,
+        puesto_nuevo VARCHAR(100) NOT NULL,
+        area_anterior VARCHAR(100) DEFAULT '',
+        area_nueva VARCHAR(100) DEFAULT '',
+        salario_anterior DECIMAL(10,2) NOT NULL DEFAULT 0,
+        salario_nuevo DECIMAL(10,2) NOT NULL DEFAULT 0,
+        fecha_cambio DATE DEFAULT CURRENT_DATE,
+        motivo VARCHAR(100) DEFAULT 'Reestructura',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
     `);
 
     console.log('Tablas verificadas/creadas');

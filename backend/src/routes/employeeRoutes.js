@@ -8,6 +8,7 @@ router.use(auth);
 
 router.get('/', ctrl.listar);
 router.get('/:id', ctrl.obtener);
+router.get('/:id/historial', ctrl.historial);
 router.post('/', role('admin', 'gerente', 'programador'), ctrl.crear);
 router.put('/:id', role('admin', 'gerente', 'programador'), ctrl.editar);
 router.delete('/:id', role('admin', 'gerente', 'programador'), ctrl.desactivar);

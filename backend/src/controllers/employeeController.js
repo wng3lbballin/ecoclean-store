@@ -72,18 +72,45 @@ const editar = async (req, res) => {
       return res.status(404).json({ error: 'Empleado no encontrado' });
     }
 
+    const old = target.rows[0];
     const emailExists = await pool.query('SELECT id FROM empleados WHERE email = $1 AND id != $2', [email, req.params.id]);
     if (emailExists.rows.length > 0) {
       return res.status(409).json({ error: 'El email ya está en uso por otro empleado' });
+    }
+
+    const nuevoSalario = parseFloat(salario || 0);
+    const nuevoPuesto = puesto !== old.puesto;
+    const nuevaArea = area !== old.area;
+    const cambioSalario = nuevoSalario !== parseFloat(old.salario);
+
+    if (nuevoPuesto || nuevaArea || cambioSalario) {
+      let motivo = 'Reestructura';
+      if (nuevoPuesto && nuevoSalario > parseFloat(old.salario)) {
+        motivo = 'Ascenso';
+      } else if (nuevoPuesto) {
+        motivo = 'Cambio de puesto';
+      } else if (!nuevoPuesto && nuevaArea) {
+        motivo = 'Rotación';
+      } else if (cambioSalario && nuevoSalario > parseFloat(old.salario)) {
+        motivo = 'Aumento';
+      } else if (cambioSalario) {
+        motivo = 'Ajuste';
+      }
+
+      await pool.query(
+        `INSERT INTO historial_empleados (empleado_id, puesto_anterior, puesto_nuevo, area_anterior, area_nueva, salario_anterior, salario_nuevo, fecha_cambio, motivo)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE, $8)`,
+        [req.params.id, old.puesto, puesto, old.area, area, old.salario, nuevoSalario, motivo]
+      );
     }
 
     const result = await pool.query(
       `UPDATE empleados SET nombre = $1, email = $2, telefono = $3, puesto = $4, area = $5,
        salario = $6, fecha_ingreso = $7, activo = $8 WHERE id = $9
        RETURNING id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, created_at`,
-      [nombre, email, telefono || '', puesto, area, salario || 0,
-       fecha_ingreso || target.rows[0].fecha_ingreso,
-       activo !== undefined ? activo : target.rows[0].activo,
+      [nombre, email, telefono || '', puesto, area, nuevoSalario,
+       fecha_ingreso || old.fecha_ingreso,
+       activo !== undefined ? activo : old.activo,
        req.params.id]
     );
 
@@ -114,4 +141,21 @@ const desactivar = async (req, res) => {
   }
 };
 
-module.exports = { listar, obtener, crear, editar, desactivar };
+const historial = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, puesto_anterior, puesto_nuevo, area_anterior, area_nueva,
+              salario_anterior, salario_nuevo, fecha_cambio, motivo, created_at
+       FROM historial_empleados
+       WHERE empleado_id = $1
+       ORDER BY fecha_cambio DESC, created_at DESC`,
+      [req.params.id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error historial empleado:', err);
+    res.status(500).json({ error: 'Error al obtener historial' });
+  }
+};
+
+module.exports = { listar, obtener, crear, editar, desactivar, historial };
