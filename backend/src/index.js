@@ -60,7 +60,7 @@ async function init() {
         nombre VARCHAR(100) NOT NULL,
         email VARCHAR(150) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
-        rol VARCHAR(20) CHECK (rol IN ('admin', 'vendedor', 'revisor')) NOT NULL,
+        rol VARCHAR(20) CHECK (rol IN ('admin', 'vendedor', 'revisor', 'gerente')) NOT NULL,
         activo BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -150,6 +150,22 @@ async function init() {
       ALTER TABLE ventas ADD COLUMN IF NOT EXISTS cliente_id UUID REFERENCES clientes(id);
       ALTER TABLE ventas ADD COLUMN IF NOT EXISTS numero_factura VARCHAR(20) DEFAULT '';
       ALTER TABLE ventas ADD COLUMN IF NOT EXISTS estado VARCHAR(20) DEFAULT 'pagado' CHECK (estado IN ('pagado','pendiente','cancelado'));
+
+      DO $$
+      DECLARE
+        cname text;
+      BEGIN
+        SELECT con.conname INTO cname
+        FROM pg_constraint con
+        JOIN pg_class rel ON rel.oid = con.conrelid
+        WHERE rel.relname = 'usuarios' AND con.contype = 'c'
+          AND pg_get_constraintdef(con.oid) LIKE '%rol%'
+        LIMIT 1;
+        IF cname IS NOT NULL THEN
+          EXECUTE 'ALTER TABLE usuarios DROP CONSTRAINT ' || cname;
+        END IF;
+      END $$;
+      ALTER TABLE usuarios ADD CONSTRAINT usuarios_rol_check CHECK (rol IN ('admin', 'vendedor', 'revisor', 'gerente'));
 
       CREATE TABLE IF NOT EXISTS logs_auditoria (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
