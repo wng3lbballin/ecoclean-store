@@ -3,15 +3,15 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
-  { to: '/ventas', label: 'Facturación', icon: '🧾', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
-  { to: '/productos', label: 'Productos', icon: '📦', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
-  { to: '/categorias', label: 'Categorías', icon: '🏷️', roles: ['admin', 'gerente'] },
-  { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
-  { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
-  { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin', 'gerente'] },
-  { to: '/usuarios', label: 'Usuarios', icon: '👤', roles: ['admin', 'gerente'] },
-  { to: '/logs', label: 'Auditoría', icon: '📋', roles: ['admin', 'revisor', 'gerente'] },
+  { to: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
+  { to: '/ventas', label: 'Facturación', icon: '🧾', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
+  { to: '/productos', label: 'Productos', icon: '📦', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
+  { to: '/categorias', label: 'Categorías', icon: '🏷️', roles: ['admin', 'gerente', 'programador'] },
+  { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
+  { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
+  { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin', 'gerente', 'programador'] },
+  { to: '/usuarios', label: 'Usuarios', icon: '👤', roles: ['admin', 'gerente', 'programador'] },
+  { to: '/logs', label: 'Auditoría', icon: '📋', roles: ['admin', 'revisor', 'gerente', 'programador'] },
 ];
 
 const roleLabels = {
@@ -19,6 +19,7 @@ const roleLabels = {
   vendedor: 'Vendedor',
   revisor: 'Revisor',
   gerente: 'Gerente',
+  programador: 'Programador',
 };
 
 export default function Sidebar({ open, onClose }) {

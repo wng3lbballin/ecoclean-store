@@ -3,6 +3,7 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const MAIN_ADMIN_EMAIL = 'admin@ecoclean.com';
+const MAIN_PROG_EMAIL = 'dev@ecoclean.com';
 
 export default function Users() {
   const { user: currentUser } = useAuth();
@@ -95,14 +96,17 @@ export default function Users() {
       admin: 'bg-purple-100 text-purple-700',
       vendedor: 'bg-blue-100 text-blue-700',
       revisor: 'bg-slate-100 text-slate-700',
+      programador: 'bg-red-100 text-red-700',
       gerente: 'bg-emerald-100 text-emerald-700',
     };
     return colors[rol] || 'bg-slate-100 text-slate-700';
   };
 
   const isMainAdmin = (u) => u.email === MAIN_ADMIN_EMAIL;
+  const isMainProg = (u) => u.email === MAIN_PROG_EMAIL;
   const isAdminUser = (u) => u.rol === 'admin';
-  const canEdit = (u) => !isMainAdmin(u) && !(currentUser?.rol !== 'admin' && isAdminUser(u));
+  const isProgUser = (u) => u.rol === 'programador';
+  const canEdit = (u) => !isMainAdmin(u) && !isMainProg(u) && !(currentUser?.rol !== 'admin' && !(currentUser?.rol === 'programador') && isAdminUser(u)) && !(currentUser?.rol !== 'programador' && isProgUser(u));
 
   if (loading) {
     return (
@@ -160,6 +164,9 @@ export default function Users() {
                       {u.nombre}
                       {isMainAdmin(u) && (
                         <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">Principal</span>
+                      )}
+                      {isMainProg(u) && (
+                        <span className="ml-2 text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded">Dev</span>
                       )}
                     </td>
                     <td className="px-5 py-3 text-slate-500">{u.email}</td>
@@ -257,7 +264,8 @@ export default function Users() {
                   onChange={(e) => setForm({ ...form, rol: e.target.value })}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
-                  {currentUser?.rol === 'admin' && <option value="admin">Administrador</option>}
+                  {currentUser?.rol === 'programador' && <option value="admin">Administrador</option>}
+                  {currentUser?.rol === 'programador' && <option value="programador">Programador</option>}
                   <option value="gerente">Gerente</option>
                   <option value="vendedor">Vendedor</option>
                   <option value="revisor">Revisor</option>

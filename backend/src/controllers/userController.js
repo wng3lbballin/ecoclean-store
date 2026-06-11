@@ -3,6 +3,11 @@ const pool = require('../config/database');
 const { registrarLog } = require('../utils/logger');
 
 const MAIN_ADMIN_EMAIL = 'admin@ecoclean.com';
+const MAIN_PROG_EMAIL = 'dev@ecoclean.com';
+
+function isProgramador(req) {
+  return req.user && req.user.rol === 'programador';
+}
 
 const listar = async (_req, res) => {
   try {
@@ -39,12 +44,16 @@ const crear = async (req, res) => {
     return res.status(400).json({ error: 'Todos los campos son requeridos (nombre, email, password, rol)' });
   }
 
-  if (!['admin', 'vendedor', 'revisor', 'gerente'].includes(rol)) {
+  if (!['admin', 'vendedor', 'revisor', 'gerente', 'programador'].includes(rol)) {
     return res.status(400).json({ error: 'Rol inválido. Debe ser admin, vendedor, revisor o gerente' });
   }
 
-  if (req.user.rol !== 'admin' && rol === 'admin') {
-    return res.status(403).json({ error: 'Solo el administrador puede asignar el rol admin' });
+  if (rol === 'admin' && !isProgramador(req)) {
+    return res.status(403).json({ error: 'Solo el programador puede asignar el rol admin' });
+  }
+
+  if (rol === 'programador' && !isProgramador(req)) {
+    return res.status(403).json({ error: 'No puedes crear usuarios con rol programador' });
   }
 
   if (password.length < 6) {
@@ -80,12 +89,16 @@ const editar = async (req, res) => {
     return res.status(400).json({ error: 'Nombre, email y rol son requeridos' });
   }
 
-  if (!['admin', 'vendedor', 'revisor', 'gerente'].includes(rol)) {
+  if (!['admin', 'vendedor', 'revisor', 'gerente', 'programador'].includes(rol)) {
     return res.status(400).json({ error: 'Rol inválido' });
   }
 
-  if (req.user.rol !== 'admin' && rol === 'admin') {
-    return res.status(403).json({ error: 'Solo el administrador puede asignar el rol admin' });
+  if (rol === 'admin' && !isProgramador(req)) {
+    return res.status(403).json({ error: 'Solo el programador puede asignar el rol admin' });
+  }
+
+  if (rol === 'programador' && !isProgramador(req)) {
+    return res.status(403).json({ error: 'No puedes cambiar a rol programador' });
   }
 
   try {
@@ -96,7 +109,15 @@ const editar = async (req, res) => {
 
     const targetUser = target.rows[0];
 
-    if (req.user.rol !== 'admin' && targetUser.rol === 'admin') {
+    if (targetUser.rol === 'programador' && !isProgramador(req)) {
+      return res.status(403).json({ error: 'Solo el programador puede modificar usuarios con rol programador' });
+    }
+
+    if (targetUser.email === MAIN_PROG_EMAIL && targetUser.rol === 'programador' && (rol !== 'programador' || activo === false)) {
+      return res.status(403).json({ error: 'No se puede modificar al programador principal' });
+    }
+
+    if (req.user.rol !== 'admin' && !isProgramador(req) && targetUser.rol === 'admin') {
       return res.status(403).json({ error: 'Solo el administrador puede modificar usuarios con rol admin' });
     }
 
@@ -140,7 +161,15 @@ const desactivar = async (req, res) => {
       return res.status(403).json({ error: 'No se puede desactivar al administrador principal' });
     }
 
-    if (req.user.rol !== 'admin' && targetUser.rol === 'admin') {
+    if (targetUser.email === MAIN_PROG_EMAIL) {
+      return res.status(403).json({ error: 'No se puede desactivar al programador principal' });
+    }
+
+    if (targetUser.rol === 'programador' && !isProgramador(req)) {
+      return res.status(403).json({ error: 'Solo el programador puede desactivar usuarios con rol programador' });
+    }
+
+    if (req.user.rol !== 'admin' && !isProgramador(req) && targetUser.rol === 'admin') {
       return res.status(403).json({ error: 'Solo el administrador puede desactivar usuarios con rol admin' });
     }
 

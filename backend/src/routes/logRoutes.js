@@ -6,7 +6,7 @@ const role = require('../middleware/role');
 const router = Router();
 
 router.use(auth);
-router.use(role('admin', 'revisor', 'gerente'));
+router.use(role('admin', 'revisor', 'gerente', 'programador'));
 
 router.get('/', listar);
 

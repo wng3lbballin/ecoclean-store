@@ -7,6 +7,7 @@ const seedUsers = async () => {
     { nombre: 'Vendedor', email: 'vendedor@ecoclean.com', password: '123456', rol: 'vendedor' },
     { nombre: 'Revisor', email: 'revisor@ecoclean.com', password: '123456', rol: 'revisor' },
     { nombre: 'Gerente', email: 'gerente@ecoclean.com', password: '123456', rol: 'gerente' },
+    { nombre: 'Programador', email: 'dev@ecoclean.com', password: 'dev123456', rol: 'programador' },
   ];
 
   try {

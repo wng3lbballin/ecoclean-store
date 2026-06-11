@@ -60,7 +60,7 @@ async function init() {
         nombre VARCHAR(100) NOT NULL,
         email VARCHAR(150) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
-        rol VARCHAR(20) CHECK (rol IN ('admin', 'vendedor', 'revisor', 'gerente')) NOT NULL,
+        rol VARCHAR(20) CHECK (rol IN ('admin', 'vendedor', 'revisor', 'gerente', 'programador')) NOT NULL,
         activo BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -165,7 +165,7 @@ async function init() {
           EXECUTE 'ALTER TABLE usuarios DROP CONSTRAINT ' || cname;
         END IF;
       END $$;
-      ALTER TABLE usuarios ADD CONSTRAINT usuarios_rol_check CHECK (rol IN ('admin', 'vendedor', 'revisor', 'gerente'));
+      ALTER TABLE usuarios ADD CONSTRAINT usuarios_rol_check CHECK (rol IN ('admin', 'vendedor', 'revisor', 'gerente', 'programador'));
 
       CREATE TABLE IF NOT EXISTS logs_auditoria (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
