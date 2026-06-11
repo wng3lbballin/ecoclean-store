@@ -8,6 +8,6 @@ router.use(auth);
 
 router.get('/', ctrl.listar);
 router.get('/:id', ctrl.obtener);
-router.post('/', role('admin'), ctrl.crear);
+router.post('/', role('admin', 'gerente'), ctrl.crear);
 
 module.exports = router;

@@ -3,21 +3,22 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'vendedor', 'revisor'] },
-  { to: '/ventas', label: 'Facturación', icon: '🧾', roles: ['admin', 'vendedor', 'revisor'] },
-  { to: '/productos', label: 'Productos', icon: '📦', roles: ['admin', 'vendedor', 'revisor'] },
-  { to: '/categorias', label: 'Categorías', icon: '🏷️', roles: ['admin'] },
-  { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor'] },
-  { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor'] },
-  { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin'] },
-  { to: '/usuarios', label: 'Usuarios', icon: '👤', roles: ['admin'] },
-  { to: '/logs', label: 'Auditoría', icon: '📋', roles: ['admin', 'revisor'] },
+  { to: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
+  { to: '/ventas', label: 'Facturación', icon: '🧾', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
+  { to: '/productos', label: 'Productos', icon: '📦', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
+  { to: '/categorias', label: 'Categorías', icon: '🏷️', roles: ['admin', 'gerente'] },
+  { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
+  { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor', 'gerente'] },
+  { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin', 'gerente'] },
+  { to: '/usuarios', label: 'Usuarios', icon: '👤', roles: ['admin', 'gerente'] },
+  { to: '/logs', label: 'Auditoría', icon: '📋', roles: ['admin', 'revisor', 'gerente'] },
 ];
 
 const roleLabels = {
   admin: 'Administrador',
   vendedor: 'Vendedor',
   revisor: 'Revisor',
+  gerente: 'Gerente',
 };
 
 export default function Sidebar({ open, onClose }) {

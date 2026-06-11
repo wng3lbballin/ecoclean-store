@@ -39,8 +39,8 @@ const crear = async (req, res) => {
     return res.status(400).json({ error: 'Todos los campos son requeridos (nombre, email, password, rol)' });
   }
 
-  if (!['admin', 'vendedor', 'revisor'].includes(rol)) {
-    return res.status(400).json({ error: 'Rol inválido. Debe ser admin, vendedor o revisor' });
+  if (!['admin', 'vendedor', 'revisor', 'gerente'].includes(rol)) {
+    return res.status(400).json({ error: 'Rol inválido. Debe ser admin, vendedor, revisor o gerente' });
   }
 
   if (password.length < 6) {
@@ -76,7 +76,7 @@ const editar = async (req, res) => {
     return res.status(400).json({ error: 'Nombre, email y rol son requeridos' });
   }
 
-  if (!['admin', 'vendedor', 'revisor'].includes(rol)) {
+  if (!['admin', 'vendedor', 'revisor', 'gerente'].includes(rol)) {
     return res.status(400).json({ error: 'Rol inválido' });
   }
 

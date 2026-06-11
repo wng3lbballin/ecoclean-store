@@ -10,7 +10,7 @@ router.use(auth);
 router.get('/', ctrl.listar);
 router.get('/:id/ticket', ctrl.ticket);
 router.get('/:id', ctrl.obtener);
-router.post('/', role('admin', 'vendedor'), ctrl.crear);
-router.patch('/:id/estado', role('admin', 'vendedor'), ctrl.actualizarEstado);
+router.post('/', role('admin', 'vendedor', 'gerente'), ctrl.crear);
+router.patch('/:id/estado', role('admin', 'vendedor', 'gerente'), ctrl.actualizarEstado);
 
 module.exports = router;

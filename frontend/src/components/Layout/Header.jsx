@@ -6,12 +6,14 @@ const roleLabels = {
   admin: 'Administrador',
   vendedor: 'Vendedor',
   revisor: 'Revisor',
+  gerente: 'Gerente',
 };
 
 const roleBadgeColors = {
   admin: 'bg-purple-100 text-purple-700',
   vendedor: 'bg-blue-100 text-blue-700',
   revisor: 'bg-slate-100 text-slate-700',
+  gerente: 'bg-emerald-100 text-emerald-700',
 };
 
 export default function Header({ onMenuClick }) {
