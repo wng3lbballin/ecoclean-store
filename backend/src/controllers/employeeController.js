@@ -60,7 +60,7 @@ const crear = async (req, res) => {
 };
 
 const editar = async (req, res) => {
-  const { nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo } = req.body;
+  const { nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, bono } = req.body;
 
   if (!nombre || !email || !puesto || !area) {
     return res.status(400).json({ error: 'Nombre, email, puesto y área son requeridos' });
@@ -101,6 +101,14 @@ const editar = async (req, res) => {
         `INSERT INTO historial_empleados (empleado_id, puesto_anterior, puesto_nuevo, area_anterior, area_nueva, salario_anterior, salario_nuevo, fecha_cambio, motivo)
          VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE, $8)`,
         [req.params.id, old.puesto, puesto, old.area, area, old.salario, nuevoSalario, motivo]
+      );
+    }
+
+    if (bono && parseFloat(bono) > 0) {
+      await pool.query(
+        `INSERT INTO historial_empleados (empleado_id, puesto_anterior, puesto_nuevo, area_anterior, area_nueva, salario_anterior, salario_nuevo, fecha_cambio, motivo)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE, $8)`,
+        [req.params.id, puesto, puesto, area, area, 0, parseFloat(bono), 'Bono']
       );
     }
 

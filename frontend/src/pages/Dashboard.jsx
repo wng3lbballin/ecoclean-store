@@ -87,11 +87,9 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    if (!loading) {
-      cargarAnalisisIA();
-    }
-  }, [loading]);
+  const handleAnalisisClick = () => {
+    cargarAnalisisIA();
+  };
 
   const generarReporte = async (e) => {
     e.preventDefault();
@@ -312,11 +310,11 @@ export default function Dashboard() {
             <h3 className="text-sm font-semibold text-slate-700">Proyecciones y Análisis IA</h3>
           </div>
           <button
-            onClick={cargarAnalisisIA}
+            onClick={handleAnalisisClick}
             disabled={analisisLoading}
-            className="text-xs text-primary-600 hover:text-primary-700 font-medium disabled:opacity-50"
+            className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
           >
-            {analisisLoading ? 'Analizando...' : 'Actualizar análisis'}
+            {analisisLoading ? 'Generando análisis...' : '🤖 Generar Análisis IA'}
           </button>
         </div>
 
@@ -340,7 +338,7 @@ export default function Dashboard() {
         )}
 
         {!analisisIA && !analisisLoading && !analisisError && (
-          <p className="text-sm text-slate-400 py-4">El análisis se cargará automáticamente. Si no aparece, verifica que DEEPSEEK_API_KEY esté configurada en el servidor.</p>
+          <p className="text-sm text-slate-400 py-4">Haz clic en <strong>Generar Análisis IA</strong> para obtener proyecciones y recomendaciones basadas en inteligencia artificial.</p>
         )}
       </div>
 

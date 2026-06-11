@@ -24,8 +24,57 @@ const calcAntiguedad = (fechaIngreso) => {
   return `${m} mes${m !== 1 ? 'es' : ''}`;
 };
 
-const areas = ['Administración', 'Ventas', 'Almacén', 'Finanzas', 'Operaciones', 'RRHH', 'Marketing'];
-const puestos = ['Gerente General', 'Gerente de Tienda', 'Vendedor Senior', 'Vendedor', 'Auxiliar de Bodega', 'Contador', 'Atención al Cliente', 'Supervisor de Limpieza', 'Analista', 'Coordinador'];
+const areasPuestos = {
+  'Administración': [
+    { puesto: 'Gerente General', salarioBase: 5000 },
+    { puesto: 'Recepcionista', salarioBase: 600 },
+    { puesto: 'Asistente Administrativo', salarioBase: 800 },
+    { puesto: 'Auxiliar de Oficina', salarioBase: 500 },
+  ],
+  'Ventas': [
+    { puesto: 'Gerente de Tienda', salarioBase: 3000 },
+    { puesto: 'Vendedor Senior', salarioBase: 1200 },
+    { puesto: 'Vendedor', salarioBase: 800 },
+    { puesto: 'Atención al Cliente', salarioBase: 700 },
+  ],
+  'Almacén': [
+    { puesto: 'Jefe de Bodega', salarioBase: 1500 },
+    { puesto: 'Auxiliar de Bodega', salarioBase: 700 },
+    { puesto: 'Supervisor de Limpieza', salarioBase: 900 },
+    { puesto: 'Operario', salarioBase: 600 },
+  ],
+  'Finanzas': [
+    { puesto: 'Contador', salarioBase: 2000 },
+    { puesto: 'Analista Financiero', salarioBase: 1800 },
+    { puesto: 'Auxiliar Contable', salarioBase: 800 },
+  ],
+  'Operaciones': [
+    { puesto: 'Gerente de Operaciones', salarioBase: 3500 },
+    { puesto: 'Coordinador', salarioBase: 1500 },
+    { puesto: 'Supervisor', salarioBase: 1200 },
+    { puesto: 'Operario', salarioBase: 600 },
+  ],
+  'RRHH': [
+    { puesto: 'Gerente de RRHH', salarioBase: 3000 },
+    { puesto: 'Analista', salarioBase: 1500 },
+    { puesto: 'Reclutador', salarioBase: 1200 },
+    { puesto: 'Asistente de RRHH', salarioBase: 800 },
+  ],
+  'Marketing': [
+    { puesto: 'Gerente de Marketing', salarioBase: 3000 },
+    { puesto: 'Analista', salarioBase: 1500 },
+    { puesto: 'Diseñador', salarioBase: 1200 },
+    { puesto: 'Community Manager', salarioBase: 900 },
+  ],
+};
+const areas = Object.keys(areasPuestos);
+
+const getSalarioBase = (area, puesto) => {
+  const puestos = areasPuestos[area];
+  if (!puestos) return 0;
+  const encontrado = puestos.find((p) => p.puesto === puesto);
+  return encontrado ? encontrado.salarioBase : 0;
+};
 
 export default function Employees() {
   const [employees, setEmployees] = useState([]);
@@ -33,7 +82,8 @@ export default function Employees() {
   const [error, setError] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: '', fecha_ingreso: '' });
+  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: '', fecha_ingreso: '', bono: '' });
+  const [aumento, setAumento] = useState('');
   const [deleteId, setDeleteId] = useState(null);
   const [historialOpen, setHistorialOpen] = useState(false);
   const [historialData, setHistorialData] = useState([]);
@@ -46,8 +96,8 @@ export default function Employees() {
 
   useEffect(() => { load(); }, []);
 
-  const openCreate = () => { setEditingId(null); setForm({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: '', fecha_ingreso: '' }); setError(''); setModalOpen(true); };
-  const openEdit = (e) => { setEditingId(e.id); setForm({ nombre: e.nombre, email: e.email || '', telefono: e.telefono || '', puesto: e.puesto, area: e.area, salario: e.salario || '', fecha_ingreso: e.fecha_ingreso ? e.fecha_ingreso.split('T')[0] : '' }); setError(''); setModalOpen(true); };
+  const openCreate = () => { setEditingId(null); setForm({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: getSalarioBase('Ventas', 'Vendedor'), fecha_ingreso: '', bono: '' }); setAumento(''); setError(''); setModalOpen(true); };
+  const openEdit = (e) => { setEditingId(e.id); setForm({ nombre: e.nombre, email: e.email || '', telefono: e.telefono || '', puesto: e.puesto, area: e.area, salario: e.salario || '', fecha_ingreso: e.fecha_ingreso ? e.fecha_ingreso.split('T')[0] : '', bono: '' }); setAumento(''); setError(''); setModalOpen(true); };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setError('');
@@ -56,8 +106,14 @@ export default function Employees() {
       return;
     }
     try {
-      if (editingId) await api.put(`/empleados/${editingId}`, form);
-      else await api.post('/empleados', form);
+      const payload = { ...form };
+      if (editingId && aumento) {
+        const aumentoDecimal = parseFloat(aumento) / 100;
+        const nuevoSalario = Math.round((parseFloat(form.salario) || 0) * (1 + aumentoDecimal) * 100) / 100;
+        payload.salario = nuevoSalario;
+      }
+      if (editingId) await api.put(`/empleados/${editingId}`, payload);
+      else await api.post('/empleados', payload);
       setModalOpen(false); load();
     } catch (err) { setError(err.response?.data?.error || 'Error al guardar'); }
   };
@@ -150,18 +206,18 @@ export default function Employees() {
                 <div className="space-y-4">
                   {historialData.map((h) => (
                     <div key={h.id} className="flex gap-4">
-                      <div className={`w-[40px] h-[40px] rounded-full flex items-center justify-center shrink-0 text-sm z-10 ${h.motivo === 'Ascenso' ? 'bg-emerald-100 text-emerald-700' : h.motivo === 'Aumento' ? 'bg-blue-100 text-blue-700' : h.motivo === 'Rotación' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>
-                        {h.motivo === 'Ascenso' ? '↑' : h.motivo === 'Aumento' ? '$' : h.motivo === 'Rotación' ? '↻' : '•'}
+                      <div className={`w-[40px] h-[40px] rounded-full flex items-center justify-center shrink-0 text-sm z-10 ${h.motivo === 'Ascenso' ? 'bg-emerald-100 text-emerald-700' : h.motivo === 'Aumento' ? 'bg-blue-100 text-blue-700' : h.motivo === 'Rotación' ? 'bg-amber-100 text-amber-700' : h.motivo === 'Bono' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-600'}`}>
+                        {h.motivo === 'Ascenso' ? '↑' : h.motivo === 'Aumento' ? '$' : h.motivo === 'Rotación' ? '↻' : h.motivo === 'Bono' ? '🎁' : '•'}
                       </div>
                       <div className="flex-1 bg-slate-50 rounded-lg p-3 border border-slate-100">
                         <div className="flex items-center justify-between mb-1">
-                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${h.motivo === 'Ascenso' ? 'bg-emerald-100 text-emerald-700' : h.motivo === 'Aumento' ? 'bg-blue-100 text-blue-700' : h.motivo === 'Rotación' ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600'}`}>{h.motivo}</span>
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${h.motivo === 'Ascenso' ? 'bg-emerald-100 text-emerald-700' : h.motivo === 'Aumento' ? 'bg-blue-100 text-blue-700' : h.motivo === 'Rotación' ? 'bg-amber-100 text-amber-700' : h.motivo === 'Bono' ? 'bg-purple-100 text-purple-700' : 'bg-slate-200 text-slate-600'}`}>{h.motivo}</span>
                           <span className="text-xs text-slate-400">{formatDate(h.fecha_cambio)}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                           <div><span className="text-slate-400">Puesto:</span> <span className="text-slate-300 line-through mr-1">{h.puesto_anterior}</span> <span className="text-slate-700 font-medium">{h.puesto_nuevo}</span></div>
                           <div><span className="text-slate-400">Área:</span> <span className="text-slate-300 line-through mr-1">{h.area_anterior}</span> <span className="text-slate-700 font-medium">{h.area_nueva}</span></div>
-                          <div className="col-span-2"><span className="text-slate-400">Salario:</span> <span className="text-slate-300 line-through mr-1">{formatMoney(h.salario_anterior)}</span> <span className="text-slate-700 font-medium">{formatMoney(h.salario_nuevo)}</span></div>
+                          <div className="col-span-2"><span className="text-slate-400">{h.motivo === 'Bono' ? 'Bono:' : 'Salario:'}</span> <span className="text-slate-300 line-through mr-1">{formatMoney(h.salario_anterior)}</span> <span className="text-slate-700 font-medium">{formatMoney(h.salario_nuevo)}</span></div>
                         </div>
                       </div>
                     </div>
@@ -204,15 +260,33 @@ export default function Employees() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Puesto</label>
-                  <select value={form.puesto} onChange={(e) => setForm({ ...form, puesto: e.target.value })} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                    {puestos.map((p) => <option key={p} value={p}>{p}</option>)}
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Área</label>
+                  <select
+                    value={form.area}
+                    onChange={(e) => {
+                      const newArea = e.target.value;
+                      const puestosArea = areasPuestos[newArea] || [];
+                      const newPuesto = puestosArea.length > 0 ? puestosArea[0].puesto : '';
+                      const newSalario = !editingId ? getSalarioBase(newArea, newPuesto) : form.salario;
+                      setForm({ ...form, area: newArea, puesto: newPuesto, salario: newSalario });
+                    }}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    {areas.map((a) => <option key={a} value={a}>{a}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Área</label>
-                  <select value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                    {areas.map((a) => <option key={a} value={a}>{a}</option>)}
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Puesto</label>
+                  <select
+                    value={form.puesto}
+                    onChange={(e) => {
+                      const newPuesto = e.target.value;
+                      const newSalario = !editingId ? getSalarioBase(form.area, newPuesto) : form.salario;
+                      setForm({ ...form, puesto: newPuesto, salario: newSalario });
+                    }}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    {(areasPuestos[form.area] || []).map((p) => <option key={p.puesto} value={p.puesto}>{p.puesto} — {formatMoney(p.salarioBase)} base</option>)}
                   </select>
                 </div>
               </div>
@@ -226,6 +300,58 @@ export default function Employees() {
                   <input type="date" value={form.fecha_ingreso} onChange={(e) => setForm({ ...form, fecha_ingreso: e.target.value })} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
                 </div>
               </div>
+              {editingId && (
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-3">
+                  <p className="text-xs font-semibold text-slate-600 uppercase">Ajustes Salariales</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Aumento (%)</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          max="100"
+                          value={aumento}
+                          onChange={(e) => setAumento(e.target.value)}
+                          placeholder="Ej: 10"
+                          className="w-24 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                        <span className="text-sm text-slate-400">%</span>
+                        <div className="flex gap-1">
+                          {[5, 10, 15, 20].map((pct) => (
+                            <button
+                              key={pct}
+                              type="button"
+                              onClick={() => setAumento(pct.toString())}
+                              className={`text-xs px-2 py-1 rounded border transition-colors ${aumento === pct.toString() ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-slate-200 text-slate-500 hover:bg-slate-100'}`}
+                            >
+                              +{pct}%
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      {aumento && (
+                        <p className="text-xs text-emerald-600 mt-1">
+                          Nuevo salario: {formatMoney(Math.round((parseFloat(form.salario) || 0) * (1 + parseFloat(aumento) / 100) * 100) / 100)}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Bono (USD)</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={form.bono}
+                        onChange={(e) => setForm({ ...form, bono: e.target.value })}
+                        placeholder="Ej: 500"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
               {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-2.5 rounded-lg">{error}</div>}
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
