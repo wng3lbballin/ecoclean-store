@@ -9,11 +9,12 @@ function isProgramador(req) {
   return req.user && req.user.rol === 'programador';
 }
 
-const listar = async (_req, res) => {
+const listar = async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT id, nombre, email, rol, activo, created_at FROM usuarios ORDER BY nombre'
-    );
+    const query = isProgramador(req)
+      ? 'SELECT id, nombre, email, rol, activo, created_at FROM usuarios ORDER BY nombre'
+      : "SELECT id, nombre, email, rol, activo, created_at FROM usuarios WHERE rol != 'programador' ORDER BY nombre";
+    const result = await pool.query(query);
     res.json(result.rows);
   } catch (err) {
     console.error('Error listar usuarios:', err);
