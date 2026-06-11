@@ -120,6 +120,16 @@ async function seedData() {
         }
       }
 
+      await pool.query(`
+        INSERT INTO empleados (nombre, email, telefono, puesto, area, salario, fecha_ingreso) VALUES
+          ('María González', 'maria.gonzalez@ecoclean.com', '555-1001', 'Gerente de Tienda', 'Administración', 2500.00, '2024-01-15'),
+          ('Carlos Ruiz', 'carlos.ruiz@ecoclean.com', '555-1002', 'Vendedor Senior', 'Ventas', 1200.00, '2024-02-01'),
+          ('Ana López', 'ana.lopez@ecoclean.com', '555-1003', 'Auxiliar de Bodega', 'Almacén', 950.00, '2024-03-10'),
+          ('Pedro Sánchez', 'pedro.sanchez@ecoclean.com', '555-1004', 'Contador', 'Finanzas', 1800.00, '2024-01-20'),
+          ('Laura Martínez', 'laura.martinez@ecoclean.com', '555-1005', 'Atención al Cliente', 'Ventas', 1000.00, '2024-04-05'),
+          ('José Herrera', 'jose.herrera@ecoclean.com', '555-1006', 'Supervisor de Limpieza', 'Operaciones', 1100.00, '2024-02-15');
+      `);
+
       console.log('Datos de ejemplo insertados correctamente');
     } else {
       console.log('Datos ya existentes, actualizando precios a USD...');

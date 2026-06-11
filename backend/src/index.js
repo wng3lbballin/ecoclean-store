@@ -13,6 +13,7 @@ const purchaseRoutes = require('./routes/purchaseRoutes');
 const logRoutes = require('./routes/logRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 const iaRoutes = require('./routes/iaRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
 const { seedUsers } = require('./utils/seeder');
 const { seedData } = require('./utils/seedData');
 
@@ -40,6 +41,7 @@ app.use('/api/compras', purchaseRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/estadisticas', statsRoutes);
 app.use('/api/ia', iaRoutes);
+app.use('/api/empleados', employeeRoutes);
 
 app.get('/api/health', async (_req, res) => {
   try {
@@ -173,6 +175,19 @@ async function init() {
         usuario_nombre VARCHAR(100) NOT NULL,
         accion VARCHAR(250) NOT NULL,
         detalle TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS empleados (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        nombre VARCHAR(150) NOT NULL,
+        email VARCHAR(150) UNIQUE NOT NULL,
+        telefono VARCHAR(30) DEFAULT '',
+        puesto VARCHAR(100) NOT NULL,
+        area VARCHAR(100) NOT NULL,
+        salario DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (salario >= 0),
+        fecha_ingreso DATE DEFAULT CURRENT_DATE,
+        activo BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);

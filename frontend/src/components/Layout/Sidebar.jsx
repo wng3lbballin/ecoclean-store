@@ -9,6 +9,7 @@ const navItems = [
   { to: '/categorias', label: 'Categorías', icon: '🏷️', roles: ['admin', 'gerente', 'programador'] },
   { to: '/clientes', label: 'Clientes', icon: '👥', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
   { to: '/proveedores', label: 'Proveedores', icon: '🚚', roles: ['admin', 'vendedor', 'revisor', 'gerente', 'programador'] },
+  { to: '/empleados', label: 'Talento Humano', icon: '🧑', roles: ['admin', 'gerente', 'programador'] },
   { to: '/compras', label: 'Compras', icon: '📥', roles: ['admin', 'gerente', 'programador'] },
   { to: '/usuarios', label: 'Usuarios', icon: '👤', roles: ['admin', 'gerente', 'programador'] },
   { to: '/logs', label: 'Auditoría', icon: '📋', roles: ['admin', 'revisor', 'gerente', 'programador'] },

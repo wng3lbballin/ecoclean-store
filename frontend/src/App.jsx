@@ -13,6 +13,7 @@ import Sales from './pages/Sales';
 import Clients from './pages/Clients';
 import Suppliers from './pages/Suppliers';
 import Purchases from './pages/Purchases';
+import Employees from './pages/Employees';
 
 export default function App() {
   return (
@@ -65,7 +66,7 @@ export default function App() {
             <Route
               path="/productos"
               element={
-                <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
+                <ProtectedRoute roles={['admin', 'vendedor', 'revisor', 'gerente', 'programador']}>
                   <Products />
                 </ProtectedRoute>
               }
@@ -74,7 +75,7 @@ export default function App() {
             <Route
               path="/ventas"
               element={
-                <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
+                <ProtectedRoute roles={['admin', 'vendedor', 'revisor', 'gerente', 'programador']}>
                   <Sales />
                 </ProtectedRoute>
               }
@@ -83,7 +84,7 @@ export default function App() {
             <Route
               path="/clientes"
               element={
-                <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
+                <ProtectedRoute roles={['admin', 'vendedor', 'revisor', 'gerente', 'programador']}>
                   <Clients />
                 </ProtectedRoute>
               }
@@ -92,8 +93,17 @@ export default function App() {
             <Route
               path="/proveedores"
               element={
-                <ProtectedRoute roles={['admin', 'vendedor', 'revisor']}>
+                <ProtectedRoute roles={['admin', 'vendedor', 'revisor', 'gerente', 'programador']}>
                   <Suppliers />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/empleados"
+              element={
+                <ProtectedRoute roles={['admin', 'gerente', 'programador']}>
+                  <Employees />
                 </ProtectedRoute>
               }
             />
