@@ -82,7 +82,7 @@ export default function Employees() {
   const [error, setError] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: '', fecha_ingreso: '', bono: '' });
+  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: '', fecha_ingreso: '', bono: '', nss: '', seguro_social: true });
   const [aumento, setAumento] = useState('');
   const [deleteId, setDeleteId] = useState(null);
   const [historialOpen, setHistorialOpen] = useState(false);
@@ -96,8 +96,8 @@ export default function Employees() {
 
   useEffect(() => { load(); }, []);
 
-  const openCreate = () => { setEditingId(null); setForm({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: getSalarioBase('Ventas', 'Vendedor'), fecha_ingreso: '', bono: '' }); setAumento(''); setError(''); setModalOpen(true); };
-  const openEdit = (e) => { setEditingId(e.id); setForm({ nombre: e.nombre, email: e.email || '', telefono: e.telefono || '', puesto: e.puesto, area: e.area, salario: e.salario || '', fecha_ingreso: e.fecha_ingreso ? e.fecha_ingreso.split('T')[0] : '', bono: '' }); setAumento(''); setError(''); setModalOpen(true); };
+  const openCreate = () => { setEditingId(null); setForm({ nombre: '', email: '', telefono: '', puesto: 'Vendedor', area: 'Ventas', salario: getSalarioBase('Ventas', 'Vendedor'), fecha_ingreso: '', bono: '', nss: '', seguro_social: true }); setAumento(''); setError(''); setModalOpen(true); };
+  const openEdit = (e) => { setEditingId(e.id); setForm({ nombre: e.nombre, email: e.email || '', telefono: e.telefono || '', puesto: e.puesto, area: e.area, salario: e.salario || '', fecha_ingreso: e.fecha_ingreso ? e.fecha_ingreso.split('T')[0] : '', bono: '', nss: e.nss || '', seguro_social: e.seguro_social !== false }); setAumento(''); setError(''); setModalOpen(true); };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setError('');
@@ -165,14 +165,15 @@ export default function Employees() {
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="bg-slate-50 text-left"><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Nombre</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Puesto</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Área</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Salario</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Ingreso</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Antigüedad</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center">Estado</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Acciones</th></tr></thead>
+            <thead><tr className="bg-slate-50 text-left"><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Nombre</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Puesto</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Área</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Salario</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">NSS</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Ingreso</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Antigüedad</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center">Estado</th><th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Acciones</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
-              {employees.length === 0 ? <tr><td colSpan={8} className="px-4 py-12 text-center"><span className="text-3xl block mb-2">👤</span><span className="text-sm text-slate-400">No hay empleados registrados</span></td></tr> : employees.map((emp) => (
+              {employees.length === 0 ? <tr><td colSpan={9} className="px-4 py-12 text-center"><span className="text-3xl block mb-2">👤</span><span className="text-sm text-slate-400">No hay empleados registrados</span></td></tr> : employees.map((emp) => (
                 <tr key={emp.id} className={`hover:bg-slate-50/50 ${!emp.activo ? 'opacity-60' : ''}`}>
                   <td className="px-4 py-3 font-medium text-slate-800">{emp.nombre}<div className="text-xs text-slate-400">{emp.email}</div></td>
                   <td className="px-4 py-3 text-slate-600">{emp.puesto}</td>
                   <td className="px-4 py-3"><span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">{emp.area}</span></td>
                   <td className="px-4 py-3 text-right text-slate-700 font-medium">{formatMoney(emp.salario)}</td>
+                  <td className="px-4 py-3 text-slate-500 text-sm">{emp.nss || '—'}</td>
                   <td className="px-4 py-3 text-slate-500 text-sm">{formatDate(emp.fecha_ingreso)}</td>
                   <td className="px-4 py-3 text-slate-600 text-sm">{calcAntiguedad(emp.fecha_ingreso)}</td>
                   <td className="px-4 py-3 text-center"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${emp.activo ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{emp.activo ? 'Activo' : 'Inactivo'}</span></td>
@@ -298,6 +299,23 @@ export default function Employees() {
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Fecha de Ingreso</label>
                   <input type="date" value={form.fecha_ingreso} onChange={(e) => setForm({ ...form, fecha_ingreso: e.target.value })} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">NSS</label>
+                  <input type="text" value={form.nss} onChange={(e) => setForm({ ...form, nss: e.target.value })} placeholder="Ej: 12345678901" maxLength={20} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+                <div className="flex items-end pb-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.seguro_social}
+                      onChange={(e) => setForm({ ...form, seguro_social: e.target.checked })}
+                      className="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Seguro Social</span>
+                  </label>
                 </div>
               </div>
               {editingId && (

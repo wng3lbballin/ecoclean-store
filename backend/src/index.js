@@ -188,6 +188,8 @@ async function init() {
         salario DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (salario >= 0),
         fecha_ingreso DATE DEFAULT CURRENT_DATE,
         activo BOOLEAN DEFAULT true,
+        nss VARCHAR(20) DEFAULT '',
+        seguro_social BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
@@ -204,6 +206,9 @@ async function init() {
         motivo VARCHAR(100) DEFAULT 'Reestructura',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+
+      ALTER TABLE empleados ADD COLUMN IF NOT EXISTS nss VARCHAR(20) DEFAULT '';
+      ALTER TABLE empleados ADD COLUMN IF NOT EXISTS seguro_social BOOLEAN DEFAULT true;
     `);
 
     console.log('Tablas verificadas/creadas');

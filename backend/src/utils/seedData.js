@@ -20,7 +20,7 @@ async function seedData() {
           ('Higiene Personal', 'Productos de higiene y cuidado personal'),
           ('Lavandería', 'Detergentes y suavizantes'),
           ('Desinfección', 'Productos desinfectantes y antibacteriales'),
-          ('Automotriz', 'Productos de limpieza para vehículos'),
+          ('Automotriz', 'Productos de limpieza para vehiculos'),
           ('Institucional', 'Productos para hoteles, oficinas y escuelas')
         RETURNING id, nombre
       `);
@@ -30,16 +30,16 @@ async function seedData() {
 
       await pool.query(`
         INSERT INTO productos (nombre, descripcion, precio, stock, categoria_id) VALUES
-          ('Desinfectante Multiusos 5L', 'Desinfectante concentrado para todo tipo de superficies', 12.50, 45, '${cats['Desinfección']}'),
-          ('Cloro Gel 1L', 'Cloro en presentación gel para baños y cocinas', 4.80, 120, '${cats['Desinfección']}'),
+          ('Desinfectante Multiusos 5L', 'Desinfectante concentrado para todo tipo de superficies', 12.50, 45, '${cats['Desinfeccion']}'),
+          ('Cloro Gel 1L', 'Cloro en presentacion gel para baños y cocinas', 4.80, 120, '${cats['Desinfeccion']}'),
           ('Limpiador de Pisos Floral 2L', 'Limpiador para pisos con aroma floral', 8.50, 80, '${cats['Cuidado de Pisos']}'),
           ('Desengrasante Industrial 5L', 'Desengrasante de alta potencia para cocinas industriales', 22.00, 30, '${cats['Limpieza Industrial']}'),
-          ('Jabón Líquido para Manos 500ml', 'Jabón líquido antibacterial para manos', 3.90, 200, '${cats['Jabones']}'),
-          ('Detergente Líquido Ropa 3L', 'Detergente para ropa delicada y normal', 10.50, 95, '${cats['Lavandería']}'),
-          ('Suavizante de Telas 2L', 'Suavizante concentrado aroma lavanda', 7.50, 70, '${cats['Lavandería']}'),
-          ('Aromatizante en Spray 400ml', 'Aromatizante ambiental spray automático', 6.50, 150, '${cats['Aromatizantes']}'),
+          ('Jabon Liquido para Manos 500ml', 'Jabon liquido antibacterial para manos', 3.90, 200, '${cats['Jabones']}'),
+          ('Detergente Liquido Ropa 3L', 'Detergente para ropa delicada y normal', 10.50, 95, '${cats['Lavanderia']}'),
+          ('Suavizante de Telas 2L', 'Suavizante concentrado aroma lavanda', 7.50, 70, '${cats['Lavanderia']}'),
+          ('Aromatizante en Spray 400ml', 'Aromatizante ambiental spray automatico', 6.50, 150, '${cats['Aromatizantes']}'),
           ('Limpiador de Vidrios 500ml', 'Limpiador para vidrios y espejos sin rayas', 3.50, 180, '${cats['Limpieza Hogar']}'),
-          ('Cera para Pisos 1L', 'Cera líquida autobrillante para pisos', 12.00, 25, '${cats['Cuidado de Pisos']}'),
+          ('Cera para Pisos 1L', 'Cera liquida autobrillante para pisos', 12.00, 25, '${cats['Cuidado de Pisos']}'),
           ('Escoba Profesional', 'Escoba de cerdas duras para uso rudo', 8.00, 60, '${cats['Accesorios']}'),
           ('Trapeador de Microfibra', 'Trapeador con cabezal de microfibra lavable', 15.00, 40, '${cats['Accesorios']}'),
           ('Limpiador de Cocina 750ml', 'Limpiador multiusos especial para cocina', 5.50, 110, '${cats['Cocina']}'),
@@ -50,32 +50,32 @@ async function seedData() {
       await pool.query(`
         INSERT INTO clientes (nombre, email, telefono, direccion) VALUES
           ('Hotel Las Palmas', 'compras@hotellaspalmas.com', '555-1001', 'Av. Reforma 500, CDMX'),
-          ('Restaurante El Sazón', 'admin@elsazon.mx', '555-1002', 'Calle Hidalgo 234, Guadalajara'),
+          ('Restaurante El Sazon', 'admin@elsazon.mx', '555-1002', 'Calle Hidalgo 234, Guadalajara'),
           ('Limpieza Total SA', 'ventas@limpiezatotal.com', '555-1003', 'Blvd. Insurgentes 890, Monterrey'),
-          ('Escuela Primaria Benito Juárez', 'direccion@benitojuarez.edu.mx', '555-1004', 'Calle Educación 100, Puebla'),
-          ('Supermercado La Económica', 'gerencia@laeconomica.com', '555-1005', 'Av. Central 450, CDMX'),
-          ('Gimnasio FitLife', 'info@fitlife.mx', '555-1006', 'Calle Deporte 78, Querétaro'),
-          ('Clínica San Rafael', 'administracion@sanrafael.com', '555-1007', 'Av. Salud 1200, Mérida'),
-          ('María García', 'maria.garcia@email.com', '555-2001', 'Calle Flores 15, CDMX'),
-          ('Juan López', 'jlopez@email.com', '555-2002', 'Av. Álamos 340, Toluca'),
+          ('Escuela Primaria Benito Juarez', 'direccion@benitojuarez.edu.mx', '555-1004', 'Calle Educacion 100, Puebla'),
+          ('Supermercado La Economica', 'gerencia@laeconomica.com', '555-1005', 'Av. Central 450, CDMX'),
+          ('Gimnasio FitLife', 'info@fitlife.mx', '555-1006', 'Calle Deporte 78, Queretaro'),
+          ('Clinica San Rafael', 'administracion@sanrafael.com', '555-1007', 'Av. Salud 1200, Merida'),
+          ('Maria Garcia', 'maria.garcia@email.com', '555-2001', 'Calle Flores 15, CDMX'),
+          ('Juan Lopez', 'jlopez@email.com', '555-2002', 'Av. Alamos 340, Toluca'),
           ('Oficinas Corporativas XYZ', 'compras@xyzcorp.com', '555-1008', 'Torre Mayor Piso 20, CDMX')
       `);
 
       await pool.query(`
         INSERT INTO proveedores (nombre, contacto, telefono, email, direccion) VALUES
-          ('Químicos del Centro', 'Ing. Roberto Márquez', '555-3001', 'ventas@quimicoscentro.com', 'Parque Industrial 100, Querétaro'),
-          ('Distribuidora CleanPro', 'Laura Sánchez', '555-3002', 'laura@cleanpro.mx', 'Av. Industria 500, CDMX'),
+          ('Quimicos del Centro', 'Ing. Roberto Marquez', '555-3001', 'ventas@quimicoscentro.com', 'Parque Industrial 100, Queretaro'),
+          ('Distribuidora CleanPro', 'Laura Sanchez', '555-3002', 'laura@cleanpro.mx', 'Av. Industria 500, CDMX'),
           ('Productos EcoClean Mayorista', 'Carlos Ruiz', '555-3003', 'cruiz@ecocleanmay.com', 'Blvd. Comercio 78, Guadalajara'),
           ('Industrias Limpex', 'Ana Ortiz', '555-3004', 'pedidos@limpex.com', 'Zona Industrial 250, Monterrey'),
-          ('Suministros del Norte', 'Pedro Hernández', '555-3005', 'info@suminorte.mx', 'Calle Negocios 30, Tijuana'),
-          ('Global Clean Supplies', 'Mariana Vega', '555-3006', 'mvega@globalclean.com', 'Parque Logístico 15, EdoMex')
+          ('Suministros del Norte', 'Pedro Hernandez', '555-3005', 'info@suminorte.mx', 'Calle Negocios 30, Tijuana'),
+          ('Global Clean Supplies', 'Mariana Vega', '555-3006', 'mvega@globalclean.com', 'Parque Logistico 15, EdoMex')
       `);
 
-      const provRes = await pool.query("SELECT id FROM proveedores LIMIT 3");
+      const provRes = await pool.query('SELECT id FROM proveedores');
       const provIds = provRes.rows.map((r) => r.id);
 
-      for (let i = 0; i < 3; i++) {
-        const prod = await pool.query('SELECT id, nombre, precio FROM productos ORDER BY RANDOM() LIMIT 3');
+      for (let i = 0; i < provIds.length; i++) {
+        const prod = await pool.query('SELECT id, precio FROM productos ORDER BY RANDOM() LIMIT 4');
         let total = 0;
         const compra = await pool.query(
           `INSERT INTO compras (proveedor_id, usuario_id, total)
@@ -83,7 +83,7 @@ async function seedData() {
           [provIds[i]]
         );
         for (const p of prod.rows) {
-          const cant = Math.floor(Math.random() * 10) + 10;
+          const cant = Math.floor(Math.random() * 20) + 20;
           const subtotal = parseFloat((p.precio * cant).toFixed(2));
           total += subtotal;
           await pool.query('INSERT INTO detalle_compras (compra_id, producto_id, cantidad, precio_unitario, subtotal) VALUES ($1,$2,$3,$4,$5)', [compra.rows[0].id, p.id, cant, p.precio, subtotal]);
@@ -93,25 +93,28 @@ async function seedData() {
         await pool.query('UPDATE compras SET total = $1 WHERE id = $2', [total.toFixed(2), compra.rows[0].id]);
       }
 
-      for (let i = 0; i < 8; i++) {
-        const prods = await pool.query('SELECT id, nombre, precio, stock FROM productos WHERE stock > 0 ORDER BY RANDOM() LIMIT 3');
+      const clientes = await pool.query('SELECT id FROM clientes');
+      const clienteIds = clientes.rows.map((r) => r.id);
+      const estadosVenta = ['pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pagado', 'pendiente', 'pendiente', 'pendiente', 'pendiente', 'pendiente', 'pendiente', 'cancelado', 'pagado', 'pagado'];
+
+      for (let i = 0; i < 30; i++) {
+        const prods = await pool.query('SELECT id, precio, stock FROM productos WHERE stock > 0 ORDER BY RANDOM() LIMIT 4');
         if (prods.rows.length === 0) continue;
         let total = 0;
         const items = [];
         for (const p of prods.rows) {
-          const cant = Math.min(Math.floor(Math.random() * 3) + 1, p.stock);
+          const cant = Math.min(Math.floor(Math.random() * 4) + 1, p.stock);
           if (cant <= 0) continue;
           total += p.precio * cant;
           items.push({ id: p.id, cantidad: cant, precio: p.precio, subtotal: (p.precio * cant).toFixed(2) });
         }
         if (items.length === 0) continue;
-        const clientRes = await pool.query('SELECT id FROM clientes ORDER BY RANDOM() LIMIT 1');
+        const clienteId = clienteIds[Math.floor(Math.random() * clienteIds.length)];
         const num = `F-${String(i + 1).padStart(5, '0')}`;
-        const estados = ['pagado', 'pagado', 'pagado', 'pagado', 'pendiente', 'pendiente', 'pagado', 'pagado'];
         const venta = await pool.query(
           `INSERT INTO ventas (usuario_id, total, cliente_id, numero_factura, estado)
            VALUES ((SELECT id FROM usuarios WHERE email='admin@ecoclean.com'), $1, $2, $3, $4) RETURNING id`,
-          [total.toFixed(2), clientRes.rows[0]?.id || null, num, estados[i]]
+          [total.toFixed(2), clienteId, num, estadosVenta[i]]
         );
         for (const item of items) {
           await pool.query('INSERT INTO detalle_ventas (venta_id, producto_id, cantidad, precio_unitario, subtotal) VALUES ($1,$2,$3,$4,$5)', [venta.rows[0].id, item.id, item.cantidad, item.precio, item.subtotal]);
@@ -121,18 +124,19 @@ async function seedData() {
       }
 
       await pool.query(`
-        INSERT INTO empleados (nombre, email, telefono, puesto, area, salario, fecha_ingreso) VALUES
-          ('María González', 'maria.gonzalez@ecoclean.com', '555-1001', 'Gerente de Tienda', 'Administración', 2500.00, '2024-01-15'),
-          ('Carlos Ruiz', 'carlos.ruiz@ecoclean.com', '555-1002', 'Vendedor Senior', 'Ventas', 1200.00, '2024-02-01'),
-          ('Ana López', 'ana.lopez@ecoclean.com', '555-1003', 'Auxiliar de Bodega', 'Almacén', 950.00, '2024-03-10'),
-          ('Pedro Sánchez', 'pedro.sanchez@ecoclean.com', '555-1004', 'Contador', 'Finanzas', 1800.00, '2024-01-20'),
-          ('Laura Martínez', 'laura.martinez@ecoclean.com', '555-1005', 'Atención al Cliente', 'Ventas', 1000.00, '2024-04-05'),
-          ('José Herrera', 'jose.herrera@ecoclean.com', '555-1006', 'Supervisor de Limpieza', 'Operaciones', 1100.00, '2024-02-15');
+        INSERT INTO empleados (nombre, email, telefono, puesto, area, salario, fecha_ingreso, nss, seguro_social) VALUES
+          ('Maria Gonzalez', 'maria.gonzalez@ecoclean.com', '555-4001', 'Gerente General', 'Administracion', 5000.00, '2023-06-15', '12345678901', true),
+          ('Carlos Ruiz', 'carlos.ruiz@ecoclean.com', '555-4002', 'Vendedor Senior', 'Ventas', 1200.00, '2024-01-10', '23456789012', true),
+          ('Ana Lopez', 'ana.lopez@ecoclean.com', '555-4003', 'Auxiliar de Bodega', 'Almacen', 700.00, '2024-03-05', '34567890123', true),
+          ('Pedro Sanchez', 'pedro.sanchez@ecoclean.com', '555-4004', 'Contador', 'Finanzas', 2000.00, '2024-02-20', '45678901234', true),
+          ('Laura Martinez', 'laura.martinez@ecoclean.com', '555-4005', 'Atencion al Cliente', 'Ventas', 700.00, '2024-04-12', '56789012345', true),
+          ('Jose Herrera', 'jose.herrera@ecoclean.com', '555-4006', 'Supervisor de Limpieza', 'Almacen', 900.00, '2024-05-08', '67890123456', false),
+          ('Diana Rojas', 'diana.rojas@ecoclean.com', '555-4007', 'Analista', 'RRHH', 1500.00, '2024-06-01', '78901234567', true)
       `);
 
       console.log('Datos de ejemplo insertados correctamente');
     } else {
-      console.log('Datos ya existentes, actualizando precios a USD...');
+      console.log('Datos ya existentes, actualizando precios...');
     }
 
     await pool.query(`
@@ -140,8 +144,8 @@ async function seedData() {
       UPDATE productos SET precio = 4.80 WHERE nombre = 'Cloro Gel 1L';
       UPDATE productos SET precio = 8.50 WHERE nombre = 'Limpiador de Pisos Floral 2L';
       UPDATE productos SET precio = 22.00 WHERE nombre = 'Desengrasante Industrial 5L';
-      UPDATE productos SET precio = 3.90 WHERE nombre = 'Jabón Líquido para Manos 500ml';
-      UPDATE productos SET precio = 10.50 WHERE nombre = 'Detergente Líquido Ropa 3L';
+      UPDATE productos SET precio = 3.90 WHERE nombre = 'Jabon Liquido para Manos 500ml';
+      UPDATE productos SET precio = 10.50 WHERE nombre = 'Detergente Liquido Ropa 3L';
       UPDATE productos SET precio = 7.50 WHERE nombre = 'Suavizante de Telas 2L';
       UPDATE productos SET precio = 6.50 WHERE nombre = 'Aromatizante en Spray 400ml';
       UPDATE productos SET precio = 3.50 WHERE nombre = 'Limpiador de Vidrios 500ml';
@@ -153,7 +157,7 @@ async function seedData() {
       UPDATE productos SET precio = 14.00 WHERE nombre = 'Shampoo para Alfombras 1L';
     `);
 
-    console.log('Precios actualizados a USD');
+    console.log('Precios actualizados');
   } catch (err) {
     console.error('Error en seed de datos:', err);
   }

@@ -4,7 +4,7 @@ const { registrarLog } = require('../utils/logger');
 const listar = async (_req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, created_at FROM empleados ORDER BY nombre'
+      'SELECT id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, nss, seguro_social, created_at FROM empleados ORDER BY nombre'
     );
     res.json(result.rows);
   } catch (err) {
@@ -16,7 +16,7 @@ const listar = async (_req, res) => {
 const obtener = async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, created_at FROM empleados WHERE id = $1',
+      'SELECT id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, nss, seguro_social, created_at FROM empleados WHERE id = $1',
       [req.params.id]
     );
     if (result.rows.length === 0) {
@@ -30,7 +30,7 @@ const obtener = async (req, res) => {
 };
 
 const crear = async (req, res) => {
-  const { nombre, email, telefono, puesto, area, salario, fecha_ingreso } = req.body;
+  const { nombre, email, telefono, puesto, area, salario, fecha_ingreso, nss, seguro_social } = req.body;
 
   if (!nombre || !email || !puesto || !area) {
     return res.status(400).json({ error: 'Nombre, email, puesto y área son requeridos' });
@@ -43,10 +43,10 @@ const crear = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO empleados (nombre, email, telefono, puesto, area, salario, fecha_ingreso)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, created_at`,
-      [nombre, email, telefono || '', puesto, area, salario || 0, fecha_ingreso || new Date().toISOString().split('T')[0]]
+      `INSERT INTO empleados (nombre, email, telefono, puesto, area, salario, fecha_ingreso, nss, seguro_social)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, nss, seguro_social, created_at`,
+      [nombre, email, telefono || '', puesto, area, salario || 0, fecha_ingreso || new Date().toISOString().split('T')[0], nss || '', seguro_social !== undefined ? seguro_social : true]
     );
 
     const nuevo = result.rows[0];
@@ -60,7 +60,7 @@ const crear = async (req, res) => {
 };
 
 const editar = async (req, res) => {
-  const { nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, bono } = req.body;
+  const { nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, bono, nss, seguro_social } = req.body;
 
   if (!nombre || !email || !puesto || !area) {
     return res.status(400).json({ error: 'Nombre, email, puesto y área son requeridos' });
@@ -114,11 +114,13 @@ const editar = async (req, res) => {
 
     const result = await pool.query(
       `UPDATE empleados SET nombre = $1, email = $2, telefono = $3, puesto = $4, area = $5,
-       salario = $6, fecha_ingreso = $7, activo = $8 WHERE id = $9
-       RETURNING id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, created_at`,
+       salario = $6, fecha_ingreso = $7, activo = $8, nss = $9, seguro_social = $10 WHERE id = $11
+       RETURNING id, nombre, email, telefono, puesto, area, salario, fecha_ingreso, activo, nss, seguro_social, created_at`,
       [nombre, email, telefono || '', puesto, area, nuevoSalario,
        fecha_ingreso || old.fecha_ingreso,
        activo !== undefined ? activo : old.activo,
+       nss !== undefined ? nss : old.nss || '',
+       seguro_social !== undefined ? seguro_social : old.seguro_social !== false,
        req.params.id]
     );
 
