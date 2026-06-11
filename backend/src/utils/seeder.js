@@ -11,12 +11,11 @@ const seedUsers = async () => {
   ];
 
   try {
-    const hashedPassword = await bcrypt.hash('123456', 10);
-
     for (const user of users) {
       const exists = await pool.query('SELECT id FROM usuarios WHERE email = $1', [user.email]);
 
       if (exists.rows.length === 0) {
+        const hashedPassword = await bcrypt.hash(user.password, 10);
         await pool.query(
           'INSERT INTO usuarios (nombre, email, password, rol) VALUES ($1, $2, $3, $4)',
           [user.nombre, user.email, hashedPassword, user.rol]
